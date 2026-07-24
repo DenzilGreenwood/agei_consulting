@@ -1,0 +1,135 @@
+{
+  "questions": [
+    {
+      "id": "q1",
+      "category": "System Autonomy & Execution Power",
+      "text": "What is the primary operational mode of your AI systems?",
+      "options": [
+        { "text": "Drafting and recommendation with mandatory human review before any action.", "points": 1 },
+        { "text": "Automated workflow routing, data classification, and internal summarization.", "points": 2 },
+        { "text": "Autonomous agents with API access capable of executing transactions or modifying state.", "points": 3 }
+      ]
+    },
+    {
+      "id": "q2",
+      "category": "System Autonomy & Execution Power",
+      "text": "How do your AI agents authenticate to internal databases or external services?",
+      "options": [
+        { "text": "They don't. All data is provided explicitly by the user in the prompt.", "points": 1 },
+        { "text": "They use a static, ambient service account with broad read permissions.", "points": 2 },
+        { "text": "They use dynamic, user-delegated tokens to perform actions on behalf of a specific human.", "points": 3 }
+      ]
+    },
+    {
+      "id": "q3",
+      "category": "System Autonomy & Execution Power",
+      "text": "If an AI model generates an incorrect decision, what is the maximum potential business impact?",
+      "options": [
+        { "text": "Low. A human catches the error before any external release.", "points": 1 },
+        { "text": "Moderate. Internal delays or minor reputational friction.", "points": 2 },
+        { "text": "Severe. Financial loss, regulatory fines, or critical infrastructure failure.", "points": 3 }
+      ]
+    },
+    {
+      "id": "q4",
+      "category": "Data Sensitivity & Privacy Constraints",
+      "text": "What type of data is routinely processed by your AI models?",
+      "options": [
+        { "text": "Public or non-sensitive corporate knowledge base data.", "points": 1 },
+        { "text": "Internal confidential IP, proprietary code, or strategic memos.", "points": 2 },
+        { "text": "Highly regulated PII, PHI, financial records, or strict NDAs.", "points": 3 }
+      ]
+    },
+    {
+      "id": "q5",
+      "category": "Data Sensitivity & Privacy Constraints",
+      "text": "How are you currently managing 'Shadow AI' (unmanaged employee use of public models)?",
+      "options": [
+        { "text": "We rely on an acceptable use policy and employee trust.", "points": 1 },
+        { "text": "We use basic network blocklists to prevent access to known consumer AI tools.", "points": 2 },
+        { "text": "We lack visibility, but suspect sensitive data is leaking through browser-based AI chats.", "points": 3 }
+      ]
+    },
+    {
+      "id": "q6",
+      "category": "Data Sensitivity & Privacy Constraints",
+      "text": "Can you programmatically prove that a specific data payload was NOT sent to a third-party LLM?",
+      "options": [
+        { "text": "Yes, we don't use third-party LLMs.", "points": 1 },
+        { "text": "No, we have to search application logs which may be incomplete.", "points": 2 },
+        { "text": "No, and this is a major concern for our GDPR/CCPA compliance.", "points": 3 }
+      ]
+    },
+    {
+      "id": "q7",
+      "category": "Regulatory, Legal, & Audit Exposure",
+      "text": "What is the primary driver for AI governance in your organization?",
+      "options": [
+        { "text": "Internal alignment, best practices, and innovation safety.", "points": 1 },
+        { "text": "Customer procurement requirements (e.g., SOC2, ISO 42001).", "points": 2 },
+        { "text": "Strict regulatory mandates (EU AI Act, HIPAA) or high liability environments.", "points": 3 }
+      ]
+    },
+    {
+      "id": "q8",
+      "category": "Regulatory, Legal, & Audit Exposure",
+      "text": "How do you currently evidence AI policy compliance during an audit?",
+      "options": [
+        { "text": "Manual review of static PDF policies, risk registers, and approval emails.", "points": 1 },
+        { "text": "Review of standard SIEM application logs and MLOps dashboards.", "points": 2 },
+        { "text": "We currently have no reliable mechanism to prove runtime compliance.", "points": 3 }
+      ]
+    },
+    {
+      "id": "q9",
+      "category": "Regulatory, Legal, & Audit Exposure",
+      "text": "If your AI-generated content is disputed in a legal setting, how do you prove its origin?",
+      "options": [
+        { "text": "We don't publish AI-generated content externally.", "points": 1 },
+        { "text": "We rely on metadata tags or visible watermarks (which can be stripped).", "points": 2 },
+        { "text": "We lack cryptographic provenance or forensic fingerprinting for our outputs.", "points": 3 }
+      ]
+    }
+  ],
+  "profiles": [
+    {
+      "minScore": 9,
+      "maxScore": 14,
+      "title": "Profile 1: Internal Evidence",
+      "maturity": "Developing",
+      "description": "Your AI deployment is primarily low-risk and internally focused. Your governance priority is establishing basic visibility and policy alignment without heavy overhead.",
+      "actionItems": [
+        "Formalize basic acceptable use policies.",
+        "Implement basic telemetry to monitor for 'Shadow AI' usage.",
+        "Ensure human-in-the-loop review for all generative outputs."
+      ],
+      "advisoryPhase": "Phase 1: Discover & Assess ($15,000)"
+    },
+    {
+      "minScore": 15,
+      "maxScore": 21,
+      "title": "Profile 2: Regulated Evidence",
+      "maturity": "Established",
+      "description": "You are processing sensitive data or subject to B2B compliance audits. You require structured evidence that your AI systems are adhering to defined security boundaries.",
+      "actionItems": [
+        "Translate PDF policies into machine-evaluable gates.",
+        "Implement a Tamper-Evident Evidence Vault for AI logs.",
+        "Begin mapping systems to ISO 42001 or the EU AI Act."
+      ],
+      "advisoryPhase": "Phase 2: Design & Align ($45,000)"
+    },
+    {
+      "minScore": 22,
+      "maxScore": 27,
+      "title": "Profile 3: Forensic Evidence",
+      "maturity": "Courtroom-Ready",
+      "description": "You are deploying high-stakes, autonomous agents or operating in strictly regulated environments. You require mathematically provable, cryptographic assurance for every AI action.",
+      "actionItems": [
+        "Implement Pre-Action Proof-Carrying Tool Execution for all agents.",
+        "Deploy Lazy Capsule Materialization (LCM) for audit-ready compliance.",
+        "Establish Dual-State Hashing pipelines for downstream artifact defensibility."
+      ],
+      "advisoryPhase": "Phase 3: Govern & Adopt ($95,000+)"
+    }
+  ]
+}
