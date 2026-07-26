@@ -15,7 +15,7 @@ export default function PythonImplementationPage() {
       description: (
         <div className="space-y-4">
           <p>
-            To guarantee that any external verifier or auditor can validate an evidence object without trusting the database operator, the payload must first be serialized deterministically using the CIAF ciaf-json-v1 canonicalization standard, which is inspired by RFC 8785 (JSON Canonicalization Scheme) but defined explicitly for cross‑language parity in AGEI. It is then hashed using SHA-256 and signed with a localized or KMS-backed Ed25519 private key. Any system implementing ciaf-json-v1 (Python, Go, Rust, etc.) will derive an identical byte sequence for a given logical JSON structure before hashing or signing, so external verifiers can recompute SHA‑256 and validate Ed25519 signatures without trusting the database operator, assuming keys and receipts are managed correctly.
+            To ensure that any external verifier or auditor can validate an evidence object without trusting the database operator, the payload must first be serialized deterministically using Canonical JSON (RFC 8785). It is then hashed using SHA-256 and signed with a localized or KMS-backed Ed25519 private key. Any system implementing RFC 8785 (Python, Go, Rust, etc.) will derive an identical byte sequence for a given logical JSON structure before hashing or signing, so external verifiers can recompute SHA‑256 and validate Ed25519 signatures without trusting the database operator, assuming keys and receipts are managed correctly.
           </p>
           <div className="bg-primary/5 border border-primary/20 p-4 rounded-lg mt-4">
             <h4 className="font-bold text-foreground mb-2">Quantum and Crypto‑Agility Note</h4>
@@ -28,7 +28,7 @@ export default function PythonImplementationPage() {
             <div className="mt-4 pt-4 border-t border-primary/20">
               <h4 className="font-bold text-foreground mb-2">Implementation Limitation</h4>
               <p className="text-sm">
-                <strong>Cross-language canonicalization caution:</strong> Cross-language support is only safe when all producers and verifiers implement <code>ciaf-json-v1</code> exactly. Standard JSON libraries are not sufficient because serialization details differ across languages, runtimes, and platforms (e.g., recursive key sorting, float formatting, Unicode escaping, and line-ending normalization). To preserve hash and signature validity, all implementations must pass the CIAF conformance test vectors before producing or verifying evidence objects.
+                <strong>Cross-language canonicalization caution:</strong> Cross-language support is only safe when all producers and verifiers implement RFC 8785 exactly. Standard JSON libraries are not sufficient because serialization details differ across languages, runtimes, and platforms (e.g., recursive key sorting, float formatting, Unicode escaping, and line-ending normalization). To preserve hash and signature validity, all implementations must pass the conformance test vectors before producing or verifying evidence objects.
               </p>
             </div>
           </div>
@@ -68,7 +68,7 @@ def generate_cryptographic_proof(payload_dict: dict, private_key_pem: bytes) -> 
         "signature": signature_hex,
         "hash_algorithm": "sha256",
         "signature_algorithm": "ED25519",
-        "canonicalization_version": "ciaf-json-v1"
+        "canonicalization_version": "rfc8785"
     }`
     },
     {
@@ -370,7 +370,7 @@ async def collect_evaluation_receipt(
             <span className="flex items-center justify-center bg-primary text-primary-foreground font-bold rounded-full w-6 h-6 text-xs">1</span>
             <h3 className="font-bold">Cryptographic Foundation</h3>
           </div>
-          <p className="text-sm text-muted-foreground">Enforcing CIAF ciaf-json-v1 canonicalization, generating SHA-256 content hashes, and executing Ed25519 digital signatures.</p>
+          <p className="text-sm text-muted-foreground">Enforcing Canonical JSON (RFC 8785), generating SHA-256 content hashes, and executing Ed25519 digital signatures.</p>
         </div>
         <div className="bg-primary/5 border border-primary/20 p-6 rounded-xl">
           <div className="flex items-center gap-2 mb-3">

@@ -23,7 +23,7 @@ export default function GlossaryPage() {
         },
         {
           term: 'Anchor / Anchoring',
-          definition: 'The process of publishing a cryptographic digest (such as a Merkle Root hash of a receipt batch) to an immutable ledger, write-once-read-many (WORM) storage, or cloud Hardware Security Module (HSM) [491, 502]. Anchoring establishes a non-repudiable proof-of-time and prevents retroactive modification of the historical evidence graph [99, 491].'
+          definition: 'The process of publishing a cryptographic digest (such as a Merkle Root hash of a receipt batch) to an immutable ledger, write-once-read-many (WORM) storage, or cloud Hardware Security Module (HSM) [491, 502]. Anchoring establishes a non-repudiable proof-of-time and protects against retroactive modification of the historical evidence graph [99, 491].'
         },
         {
           term: 'Assurance Profile',
@@ -194,7 +194,7 @@ export default function GlossaryPage() {
         },
         {
           term: 'Multimodal Concept Memory (MCM)',
-          definition: 'A neuro-symbolic memory engine that maps long-horizon interactions to an explicit 8-lobe semantic bottleneck [516, 519, 523]. It consolidates, prunes, and hashes cognitive states over long horizons to prevent cognitive tampering in autonomous systems [515, 520].'
+          definition: 'A neuro-symbolic memory engine that maps long-horizon interactions to an explicit 8-lobe semantic bottleneck [516, 519, 523]. It consolidates, prunes, and hashes cognitive states over long horizons to mitigate cognitive tampering in autonomous systems [515, 520].'
         }
       ]
     },
@@ -263,7 +263,7 @@ export default function GlossaryPage() {
       terms: [
         {
           term: 'WORM (Write-Once-Read-Many)',
-          definition: 'An immutable storage class that physically prevents any modification, overwriting, or deletion of recorded bytes [143, 167, 500]. All high-assurance receipts, gate evaluations, and vault objects are committed to WORM-configured files to guarantee mathematical defensibility [143, 167, 500].'
+          definition: 'An immutable storage class that strictly limits unauthorized modification, overwriting, or deletion of recorded bytes [143, 167, 500]. All high-assurance receipts, gate evaluations, and vault objects are committed to WORM-configured files to support mathematical defensibility [143, 167, 500].'
         }
       ]
     }

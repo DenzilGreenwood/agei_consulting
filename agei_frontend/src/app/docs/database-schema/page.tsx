@@ -54,7 +54,7 @@ $$ LANGUAGE plpgsql;`
       id: 2,
       title: "Performance Optimized Indices",
       icon: <Zap className="h-6 w-6 text-primary" />,
-      description: "Crucial indices designed to prevent full table scans on heavily audited tables (e.g., receipts) and ensure sub-second RLS policy evaluation and delegation chain traversal.",
+      description: "Crucial indices designed to avoid full table scans on heavily audited tables (e.g., receipts) and ensure sub-second RLS policy evaluation and delegation chain traversal.",
       code: `-- =====================================================================
 -- 2. PERFORMANCE OPTIMIZED INDICES (Preventing scans on joins & RLS)
 -- =====================================================================
@@ -319,7 +319,7 @@ CREATE POLICY encrypted_content_select_policy ON public.receipt_encrypted_conten
             <Zap className="h-6 w-6 text-primary" />
             <h3 className="font-bold">Optimized Auditing</h3>
           </div>
-          <p className="text-sm text-muted-foreground">Strategic indices prevent expensive sequential scans during hash verification and agent delegation checks.</p>
+          <p className="text-sm text-muted-foreground">Strategic indices avoid expensive sequential scans during hash verification and agent delegation checks.</p>
         </div>
       </div>
 

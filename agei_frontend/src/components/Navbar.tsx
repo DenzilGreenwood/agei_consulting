@@ -22,8 +22,8 @@ export default function Navbar() {
               <Link href="/methodology" className="text-muted-foreground hover:text-foreground transition-colors">
                 Methodology
               </Link>
-              <Link href="/advisory" className="text-muted-foreground hover:text-foreground transition-colors">
-                Advisory
+              <Link href="/pricing-and-outcomes" className="text-muted-foreground hover:text-foreground transition-colors">
+                Pricing and Outcomes
               </Link>
               <Link href="/example" className="text-muted-foreground hover:text-foreground transition-colors">
                 Example

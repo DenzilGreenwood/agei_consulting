@@ -176,7 +176,7 @@ export default function EvidenceInspector({
                     <span className="text-[10px] text-muted-foreground uppercase tracking-wider block font-semibold mb-1">
                       Active Merkle Root Hash
                     </span>
-                    <code className="block text-[10px] text-secondary bg-muted border border-border p-2 rounded font-mono truncate">
+                    <code className="block text-[10px] text-primary bg-muted border border-border p-2 rounded font-mono truncate">
                       {selectedMessage.proof.merkleRoot}
                     </code>
                   </div>

@@ -485,7 +485,7 @@ export default function DocsIndexPage() {
   "receipt_metadata": {
     "receipt_id": "rcpt:org-123:stage-code:uuid-string",
     "receipt_type": "type_of_receipt_event",
-    "canonicalization_version": "agei-json-v1",
+    "canonicalization_version": "rfc8785",
     "schema_version_id": "schema-uuid-from-registry",
     "hash_algorithm": "sha256",
     "signature_algorithm": "ED25519",
@@ -532,7 +532,7 @@ export default function DocsIndexPage() {
               <li><strong>Extraction:</strong> The active system state is compiled into a raw JSON object.</li>
               <li><strong>Canonicalization:</strong> The JSON payload is serialized according to RFC 8785 (Canonical JSON) to enforce deterministic key ordering, line-ending treatment, and spacing [517].</li>
               <li><strong>Hashing:</strong> A SHA-256 checksum is calculated over the canonical UTF-8 string to generate a tamper-evident content hash [242, 489].</li>
-              <li><strong>Attestation & Signing:</strong> The content hash is signed using an Ed25519 private key (local container key or HSM/KMS provider key) to guarantee non-repudiation [242, 489].</li>
+              <li><strong>Attestation & Signing:</strong> The content hash is signed using an Ed25519 private key (local container key or HSM/KMS provider key) to support non-repudiation [242, 489].</li>
               <li><strong>Batching:</strong> The signed receipt is committed to the relational schema, hashed into a Merkle Tree, and periodically anchored to long-term storage [490].</li>
             </ol>
           </div>
@@ -624,7 +624,7 @@ export default function DocsIndexPage() {
           </div>
           <div className="bg-muted/30 p-6 rounded-xl border border-border">
             <h4 className="font-bold mb-2">Constraints Enforcement</h4>
-            <p className="text-sm text-muted-foreground">Ensure all relational foreign-key references are mapped prior to database commit to guarantee referential integrity of the evidence graph [255].</p>
+            <p className="text-sm text-muted-foreground">Ensure all relational foreign-key references are mapped prior to database commit to maintain referential integrity of the evidence graph [255].</p>
           </div>
         </div>
       </section>

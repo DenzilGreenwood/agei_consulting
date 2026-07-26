@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/Card";
+import { AvatarCarousel } from "@/components/AvatarCarousel";
 
 export default function Home() {
   return (
@@ -12,7 +13,7 @@ export default function Home() {
             AI Governance Demands <span className="text-primary">Proof, Not Logs.</span>
           </h1>
           <p className="text-xl md:text-2xl text-muted-foreground mb-10 max-w-3xl mx-auto">
-            Don't rely on policy theater or mutable application logs to manage enterprise AI risk. We design and integrate AI Governance Evidence Infrastructure (AGEI)—the cryptographic plumbing that makes policy machine-enforceable and audits mathematically verifiable.
+            Don't rely on policy theater or mutable application logs to manage enterprise AI risk. We design and integrate AI Governance Evidence Infrastructure (AGEI)—cryptographic plumbing that makes policy machine-enforceable and audits cryptographically verifiable.
           </p>
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
             <Link href="/diagnostic" className="bg-primary text-primary-foreground px-8 py-3 rounded-md font-semibold text-lg hover:opacity-90 transition-opacity w-full sm:w-auto">
@@ -31,7 +32,7 @@ export default function Home() {
           <div className="text-center mb-16">
             <h2 className="text-3xl font-bold mb-6">The Log Myth vs. Verifiable Evidence</h2>
             <p className="text-lg text-muted-foreground max-w-3xl mx-auto">
-              Most enterprises assume their MLOps dashboards and SIEM logs provide compliance. They do not. Logs are mutable, optimized for operational debugging, and detached from corporate policy. If an autonomous agent triggers an unauthorized $100k transaction, or if sensitive intellectual property is leaked to a public chatbot, an unstructured log file cannot prove authority, delegation, or policy compliance to an auditor, insurer, or regulator.
+              Most enterprises assume their MLOps dashboards and SIEM logs provide compliance. They do not. Logs are mutable, optimized for operational debugging, and detached from corporate policy. If an autonomous agent triggers an unauthorized $100k transaction, an unstructured log file cannot by itself prove authority, delegation, or policy compliance to an auditor.
             </p>
           </div>
 
@@ -48,7 +49,7 @@ export default function Home() {
                 <tr className="bg-background">
                   <td className="p-4 border-b border-r border-border font-medium">Core Purpose</td>
                   <td className="p-4 border-b border-r border-border text-muted-foreground">Operational debugging and system health.</td>
-                  <td className="p-4 border-b border-border text-foreground">Proving governance-relevant facts with mathematical certainty.</td>
+                  <td className="p-4 border-b border-border text-foreground">Proving governance-relevant facts with cryptographically verifiable evidence.</td>
                 </tr>
                 <tr className="bg-card">
                   <td className="p-4 border-b border-r border-border font-medium">Integrity</td>
@@ -95,7 +96,7 @@ export default function Home() {
                 <CardTitle>2. Autonomous Agent Governance & Runtime Security</CardTitle>
               </CardHeader>
               <CardContent>
-                <p className="mb-6">We structure agentic workflows around the Five Governance Planes: Identity, Policy, Privilege, Execution, and Evidence. We implement Pre-Action Proof-Carrying Tool Execution to prevent autonomous agents from acting under "ambient system privilege" without explicit, delegated human authority.</p>
+                <p className="mb-6">We structure agentic workflows around the Five Governance Planes: Identity, Policy, Privilege, Execution, and Evidence. We implement Pre-Action Proof-Carrying Tool Execution to strictly govern autonomous agents acting under "ambient system privilege" without explicit, delegated human authority.</p>
                 <Link href="/services" className="text-primary hover:underline font-medium">Explore Agent Governance &rarr;</Link>
               </CardContent>
             </Card>
@@ -126,45 +127,14 @@ export default function Home() {
       {/* Targeted Buyer Entry Points */}
       <section className="py-20 px-4 bg-card border-t border-border">
         <div className="container mx-auto max-w-5xl">
-          <h2 className="text-3xl font-bold mb-12 text-center">Who We Serve</h2>
-          
-          <div className="space-y-8">
-            <div className="flex flex-col md:flex-row gap-6 items-start">
-              <div className="bg-background p-6 rounded-lg border border-border flex-1">
-                <h4 className="font-semibold text-lg text-primary mb-2">Elena Rostova (Chief Risk Officer)</h4>
-                <p className="text-muted-foreground italic mb-4">"I am tired of paying millions for static PDF policies that developers ignore. I need mathematical proof that our AI models comply with the EU AI Act and ISO 42001."</p>
-                <div className="text-sm font-medium">
-                  <span className="text-foreground">Your Solution:</span> Policy-to-Gate Translation & Merkle Audit Packs.
-                </div>
-              </div>
-
-              <div className="bg-background p-6 rounded-lg border border-border flex-1">
-                <h4 className="font-semibold text-lg text-primary mb-2">Marcus Vance (Chief Information Security Officer)</h4>
-                <p className="text-muted-foreground italic mb-4">"Our developers are deploying autonomous tool-using agents, and employees are pasting confidential code into public models. I need to secure our perimeter."</p>
-                <div className="text-sm font-medium">
-                  <span className="text-foreground">Your Solution:</span> Five Planes Framework & Shadow AI Registry.
-                </div>
-              </div>
-            </div>
-
-            <div className="flex flex-col md:flex-row gap-6 items-start">
-              <div className="bg-background p-6 rounded-lg border border-border flex-1">
-                <h4 className="font-semibold text-lg text-primary mb-2">Dr. Aris Thorne (Head of AI Engineering)</h4>
-                <p className="text-muted-foreground italic mb-4">"Governance cannot slow down our inference pipelines or bloat our cloud storage bills with terabytes of raw prompt logs."</p>
-                <div className="text-sm font-medium">
-                  <span className="text-foreground">Your Solution:</span> Out-of-band Sidecar SDK & Lazy Capsule Materialization.
-                </div>
-              </div>
-
-              <div className="bg-background p-6 rounded-lg border border-border flex-1">
-                <h4 className="font-semibold text-lg text-primary mb-2">Sarah Jenkins (General Counsel)</h4>
-                <p className="text-muted-foreground italic mb-4">"If we release an AI-generated report, metadata stripping or malicious cropping could break our chain-of-custody. We need dispute-ready defensibility."</p>
-                <div className="text-sm font-medium">
-                  <span className="text-foreground">Your Solution:</span> Dual-State Hashing and Forensic Fingerprinting.
-                </div>
-              </div>
-            </div>
+          <div className="text-center mb-12">
+            <h2 className="text-3xl font-bold mb-4">Executive Business Value</h2>
+            <p className="text-muted-foreground text-lg max-w-3xl mx-auto mb-6">
+              CognitiveInsight.ai helps enterprise leaders turn AI governance from policy intent into operational evidence. We work with executive stakeholders to reduce manual audit preparation, improve control coverage, and create cryptographically verifiable records that support oversight, audit readiness, and governance maturity. The following are representative stakeholder profiles and the outcomes they care about most.
+            </p>
           </div>
+
+          <AvatarCarousel />
         </div>
       </section>
 

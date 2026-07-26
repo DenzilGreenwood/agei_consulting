@@ -7,7 +7,7 @@ export default function Services() {
       <div className="text-center mb-16">
         <h1 className="text-4xl md:text-5xl font-extrabold mb-6 text-foreground">Engineering-Led Advisory & Systems Integration</h1>
         <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
-          We do not just analyze your risk; we implement the cryptographic infrastructure that proves your compliance.
+          We do not just analyze risk; we design and implement the cryptographic infrastructure that helps demonstrate compliance, support auditability, and make AI governance operational.
         </p>
       </div>
 
@@ -35,7 +35,7 @@ export default function Services() {
             <ul className="space-y-2 list-disc list-inside text-sm">
               <li><strong>Five Governance Planes:</strong> Model agent behavior across Identity, Policy, Privilege, Execution, and Evidence.</li>
               <li><strong>Pre-Action Proofs:</strong> Implement secure tool wrappers that inspect authorization tokens before executing actions.</li>
-              <li><strong>Agent Classification:</strong> Segment agent classes and establish just-in-time privilege elevation gates.</li>
+              <li><strong>Agent Classification:</strong> Classify agents by authority level and operational risk to establish just-in-time privilege elevation gates.</li>
             </ul>
           </CardContent>
         </Card>
@@ -48,7 +48,7 @@ export default function Services() {
             <p className="mb-4">We expand your governance perimeter to capture, classify, and remediate unmanaged AI usage across the enterprise.</p>
             <ul className="space-y-2 list-disc list-inside text-sm">
               <li><strong>Evidence-Led Discovery:</strong> Integrate purpose-limited telemetry to identify unsanctioned model access.</li>
-              <li><strong>Proportional Response Engines:</strong> Build automated state machines to route discovery records based on risk.</li>
+              <li><strong>Policy-Driven Response Routing:</strong> Build automated state machines to route discovery records based on risk.</li>
               <li><strong>Sanctioned Migration Pipelines:</strong> Establish clear pathways to transition workers to sanctioned internal channels.</li>
             </ul>
           </CardContent>
@@ -61,9 +61,9 @@ export default function Services() {
           <CardContent>
             <p className="mb-4">We implement dual-layer cryptographic watermarking and forensic fingerprinting to protect and trace distributed digital assets.</p>
             <ul className="space-y-2 list-disc list-inside text-sm">
-              <li><strong>Dual-State Hashing Pipelines:</strong> Compute distinct hashes for pristine content and distributed files.</li>
+              <li><strong>Dual-State Hashing Pipelines:</strong> Compute distinct hashes for pristine internal content versus public distributed files, preserving provenance even through benign format changes.</li>
               <li><strong>Explicit Watermark Descriptors:</strong> Embed visible overlays, steganographic payloads, and metadata markers.</li>
-              <li><strong>Forensic Fingerprinting:</strong> Generate zone-based content fingerprints as fallback proof.</li>
+              <li><strong>Forensic Fingerprinting:</strong> Generate zone-based content fingerprints as robust fallback evidence.</li>
             </ul>
           </CardContent>
         </Card>
