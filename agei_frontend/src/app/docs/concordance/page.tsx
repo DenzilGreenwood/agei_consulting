@@ -1,5 +1,5 @@
 import React from 'react';
-import { BookOpen, Map, Database, LayoutGrid, ShieldCheck, FileText, CheckCircle2 } , ArrowLeft } from 'lucide-react';
+import { BookOpen, Map, Database, LayoutGrid, ShieldCheck, FileText, CheckCircle2, ArrowLeft } from 'lucide-react';
 import Link from 'next/link';
 
 export const metadata = {

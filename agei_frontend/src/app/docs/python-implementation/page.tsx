@@ -1,6 +1,6 @@
 import Link from 'next/link';
 import React from 'react';
-import { Server, ShieldCheck, Database, Code, ChevronDown, Key, FileCode2, Users, EyeOff } , ArrowLeft } from 'lucide-react';
+import { Server, ShieldCheck, Database, Code, ChevronDown, Key, FileCode2, Users, EyeOff, ArrowLeft } from 'lucide-react';
 
 export const metadata = {
   title: 'Python Implementation Guide | AGEI',

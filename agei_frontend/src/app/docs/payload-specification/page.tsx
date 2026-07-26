@@ -1,7 +1,7 @@
 import fs from 'fs';
 import path from 'path';
 import Link from 'next/link';
-import { FileText, ChevronRight, ChevronDown, Code, Database, ShieldCheck, FileJson, Server, Info } , ArrowLeft } from 'lucide-react';
+import { FileText, ChevronRight, ChevronDown, Code, Database, ShieldCheck, FileJson, Server, Info, ArrowLeft } from 'lucide-react';
 
 export const metadata = {
   title: 'Documentation Hub | AGEI',

@@ -1,6 +1,6 @@
 import Link from 'next/link';
 import React from 'react';
-import { Database, ShieldCheck, Zap, Lock, Code, ChevronDown } , ArrowLeft } from 'lucide-react';
+import { Database, ShieldCheck, Zap, Lock, Code, ChevronDown, ArrowLeft } from 'lucide-react';
 
 export const metadata = {
   title: 'Database Security & Schema | AGEI',

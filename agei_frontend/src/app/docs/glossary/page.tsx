@@ -1,5 +1,5 @@
 import React from 'react';
-import { BookA, Shield, Key, Database, ChevronRight, Hash, Network, Scale } , ArrowLeft } from 'lucide-react';
+import { BookA, Shield, Key, Database, ChevronRight, Hash, Network, Scale, ArrowLeft } from 'lucide-react';
 import Link from 'next/link';
 
 export const metadata = {
