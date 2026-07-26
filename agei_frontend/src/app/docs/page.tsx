@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import { BookOpen, FileJson, FileCode2, Database, ShieldCheck, ChevronRight, LayoutGrid } from 'lucide-react';
+import { BookOpen, FileJson, FileCode2, Database, ShieldCheck, ChevronRight, LayoutGrid, Map, BookA } from 'lucide-react';
 
 export const metadata = {
   title: 'Documentation Hub | AGEI',
@@ -30,6 +30,22 @@ export default function DocsLandingPage() {
       href: "/docs/database-schema",
       icon: <Database className="h-8 w-8 text-primary" />,
       color: "from-purple-500/20 to-indigo-500/10",
+      status: "Ready"
+    },
+    {
+      title: "Source Concordance",
+      description: "The authoritative index mapping code-level concepts and citation brackets back to the foundational research portfolio.",
+      href: "/docs/concordance",
+      icon: <Map className="h-8 w-8 text-primary" />,
+      color: "from-amber-500/20 to-orange-500/10",
+      status: "Ready"
+    },
+    {
+      title: "Governance Glossary",
+      description: "Foundational technical terms, cryptographic primitives, and architectural concepts underpinning the AGEI.",
+      href: "/docs/glossary",
+      icon: <BookA className="h-8 w-8 text-primary" />,
+      color: "from-rose-500/20 to-red-500/10",
       status: "Ready"
     }
   ];

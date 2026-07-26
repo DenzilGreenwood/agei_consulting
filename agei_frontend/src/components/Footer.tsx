@@ -1,3 +1,5 @@
+import Link from 'next/link';
+
 export default function Footer() {
   return (
     <footer className="border-t border-border bg-card py-12">
@@ -9,7 +11,7 @@ export default function Footer() {
         <div className="text-left md:text-right mt-4 md:mt-0">
           <div>&copy; {new Date().getFullYear()} CognitiveInsight.ai. All rights reserved.</div>
           <div className="mt-1.5 text-xs opacity-75 max-w-sm md:ml-auto">
-            Code blueprints and documentation provided on this site are licensed under the <a href="https://spdx.org/licenses/BUSL-1.1.html" target="_blank" rel="noopener noreferrer" className="underline hover:text-primary transition-colors">Business Source License 1.1</a> (BUSL-1.1).
+            Code blueprints and documentation provided on this site are licensed under the <Link href="/license" className="underline hover:text-primary transition-colors">Business Source License 1.1</Link> (BUSL-1.1).
           </div>
         </div>
       </div>
