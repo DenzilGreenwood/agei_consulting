@@ -5,7 +5,10 @@ import mermaid from "mermaid";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/Card";
 
 export default function Methodology() {
+  const [mounted, setMounted] = React.useState(false);
+
   useEffect(() => {
+    setMounted(true);
     mermaid.initialize({
       startOnLoad: true,
       theme: "base",
@@ -13,7 +16,8 @@ export default function Methodology() {
         fontFamily: "var(--font-geist-sans)",
       },
     });
-    mermaid.contentLoaded();
+    // Wait a tick for the DOM to update with the mermaid div before calling contentLoaded
+    setTimeout(() => mermaid.contentLoaded(), 0);
   }, []);
 
   return (
@@ -32,7 +36,8 @@ export default function Methodology() {
         </p>
         
         <div className="bg-background p-6 rounded-lg border border-border overflow-x-auto flex justify-center">
-          <div className="mermaid">
+          {mounted && (
+            <div className="mermaid">
 {`---
 config:
   layout: elk
@@ -63,7 +68,8 @@ flowchart TD
     classDef ingestion fill:#f0fdfa,stroke:#2dd4bf,stroke-width:2px,color:#134e4a;
     classDef synthesis fill:#f5f3ff,stroke:#a78bfa,stroke-width:2px,color:#3b0764;
     classDef evidence fill:#f0fdf4,stroke:#4ade80,stroke-width:2px,color:#14532d;`}
-          </div>
+            </div>
+          )}
         </div>
       </div>
 
