@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import { BookOpen, FileJson, FileCode2, Database, ShieldCheck, ChevronRight, LayoutGrid, Map, BookA } from 'lucide-react';
+import { BookOpen, FileJson, FileCode2, Database, ShieldCheck, ChevronRight, LayoutGrid, Map, BookA, Activity } from 'lucide-react';
 
 export const metadata = {
   title: 'Documentation Hub | AGEI',
@@ -46,6 +46,22 @@ export default function DocsLandingPage() {
       href: "/docs/glossary",
       icon: <BookA className="h-8 w-8 text-primary" />,
       color: "from-rose-500/20 to-red-500/10",
+      status: "Ready"
+    },
+    {
+      title: "Hybrid Architecture",
+      description: "Technical specification for the Hybrid Cryptographic Assurance Model and External Attestation Protocol.",
+      href: "/docs/nda",
+      icon: <ShieldCheck className="h-8 w-8 text-primary" />,
+      color: "from-sky-500/20 to-blue-500/10",
+      status: "Ready"
+    },
+    {
+      title: "Real-Time Transactional Attestation",
+      description: "Operational Blueprint for On-Premise/Cloud Split AI Evidence Infrastructure.",
+      href: "/docs/attestation",
+      icon: <Activity className="h-8 w-8 text-primary" />,
+      color: "from-emerald-500/20 to-teal-500/10",
       status: "Ready"
     }
   ];

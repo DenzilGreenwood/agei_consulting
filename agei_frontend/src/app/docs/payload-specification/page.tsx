@@ -1,7 +1,7 @@
 import fs from 'fs';
 import path from 'path';
 import Link from 'next/link';
-import { FileText, ChevronRight, ChevronDown, Code, Database, ShieldCheck, FileJson, Server, Info } from 'lucide-react';
+import { FileText, ChevronRight, ChevronDown, Code, Database, ShieldCheck, FileJson, Server, Info } , ArrowLeft } from 'lucide-react';
 
 export const metadata = {
   title: 'Documentation Hub | AGEI',
@@ -434,6 +434,12 @@ const eventsData = [
 export default function DocsIndexPage() {
   return (
     <div className="container mx-auto px-4 py-12 max-w-6xl min-h-[calc(100vh-4rem)]">
+      <div className="mb-8">
+        <Link href="/docs" className="inline-flex items-center text-sm text-muted-foreground hover:text-primary transition-colors">
+          <ArrowLeft className="h-4 w-4 mr-2" />
+          Back to Documentation
+        </Link>
+      </div>
       
       {/* Header */}
       <div className="mb-12 border-b border-border pb-8">

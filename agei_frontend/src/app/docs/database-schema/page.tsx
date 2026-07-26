@@ -1,5 +1,6 @@
+import Link from 'next/link';
 import React from 'react';
-import { Database, ShieldCheck, Zap, Lock, Code, ChevronDown } from 'lucide-react';
+import { Database, ShieldCheck, Zap, Lock, Code, ChevronDown } , ArrowLeft } from 'lucide-react';
 
 export const metadata = {
   title: 'Database Security & Schema | AGEI',
@@ -287,6 +288,12 @@ CREATE POLICY encrypted_content_select_policy ON public.receipt_encrypted_conten
 
   return (
     <div className="container mx-auto px-4 py-12 max-w-5xl min-h-[calc(100vh-4rem)]">
+      <div className="mb-8">
+        <Link href="/docs" className="inline-flex items-center text-sm text-muted-foreground hover:text-primary transition-colors">
+          <ArrowLeft className="h-4 w-4 mr-2" />
+          Back to Documentation
+        </Link>
+      </div>
       
       {/* Header */}
       <div className="mb-12 border-b border-border pb-8">

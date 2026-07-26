@@ -1,5 +1,5 @@
 import React from 'react';
-import { BookA, Shield, Key, Database, ChevronRight, Hash, Network, Scale } from 'lucide-react';
+import { BookA, Shield, Key, Database, ChevronRight, Hash, Network, Scale } , ArrowLeft } from 'lucide-react';
 import Link from 'next/link';
 
 export const metadata = {
@@ -271,6 +271,12 @@ export default function GlossaryPage() {
 
   return (
     <div className="container mx-auto px-4 py-12 max-w-6xl">
+      <div className="mb-8">
+        <Link href="/docs" className="inline-flex items-center text-sm text-muted-foreground hover:text-primary transition-colors">
+          <ArrowLeft className="h-4 w-4 mr-2" />
+          Back to Documentation
+        </Link>
+      </div>
       <div className="mb-10 border-b border-border pb-8">
         <div className="flex items-center gap-2 text-sm text-muted-foreground mb-4">
           <Link href="/docs" className="hover:text-primary transition-colors">Documentation</Link>
