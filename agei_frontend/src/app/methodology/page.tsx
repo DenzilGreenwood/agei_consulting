@@ -19,19 +19,19 @@ export default function Methodology() {
   return (
     <div className="container mx-auto px-4 py-20 max-w-4xl">
       <div className="text-center mb-16">
-        <h1 className="text-4xl md:text-5xl font-extrabold mb-6 text-[var(--foreground)]">We Rely on a Verifiable Control Plane, Not Consulting Guesswork.</h1>
-        <p className="text-xl text-[var(--muted-foreground)] max-w-3xl mx-auto">
+        <h1 className="text-4xl md:text-5xl font-extrabold mb-6 text-foreground">We Rely on a Verifiable Control Plane, Not Consulting Guesswork.</h1>
+        <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
           Every CognitiveInsight advisory engagement is powered by our proprietary software platform: the AGEI Platform.
         </p>
       </div>
 
       <div className="glass p-8 rounded-xl mb-16">
-        <h2 className="text-2xl font-bold mb-6 text-[var(--accent)] text-center">How the AGEI Platform Transforms Your Engagement</h2>
-        <p className="text-lg text-[var(--foreground)] mb-6 text-center">
+        <h2 className="text-2xl font-bold mb-6 text-primary text-center">How the AGEI Platform Transforms Your Engagement</h2>
+        <p className="text-lg text-foreground mb-6 text-center">
           When you hire CognitiveInsight, you do not just get a static PowerPoint slide deck. Your entire engagement is initiated, managed, and audited through a dedicated, secure Next.js and Supabase workspace. This platform acts as your live AI Governance control plane.
         </p>
         
-        <div className="bg-[var(--background)] p-6 rounded-lg border border-[var(--border)] overflow-x-auto flex justify-center">
+        <div className="bg-background p-6 rounded-lg border border-border overflow-x-auto flex justify-center">
           <div className="mermaid">
 {`---
 config:

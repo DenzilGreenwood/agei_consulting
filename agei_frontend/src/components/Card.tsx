@@ -2,7 +2,7 @@ import React from "react";
 
 export function Card({ children, className = "" }: { children: React.ReactNode; className?: string }) {
   return (
-    <div className={`bg-[var(--card)] border border-[var(--border)] rounded-xl overflow-hidden transition-all duration-300 hover:border-[var(--accent)] hover:shadow-lg hover:shadow-[var(--accent)]/10 ${className}`}>
+    <div className={`bg-card border border-border rounded-xl overflow-hidden transition-all duration-300 hover:border-accent hover:shadow-lg hover:shadow-accent/10 ${className}`}>
       {children}
     </div>
   );
@@ -10,7 +10,7 @@ export function Card({ children, className = "" }: { children: React.ReactNode; 
 
 export function CardHeader({ children, className = "" }: { children: React.ReactNode; className?: string }) {
   return (
-    <div className={`p-6 border-b border-[var(--border)] ${className}`}>
+    <div className={`p-6 border-b border-border ${className}`}>
       {children}
     </div>
   );
@@ -18,7 +18,7 @@ export function CardHeader({ children, className = "" }: { children: React.React
 
 export function CardTitle({ children, className = "" }: { children: React.ReactNode; className?: string }) {
   return (
-    <h3 className={`text-xl font-bold text-[var(--foreground)] ${className}`}>
+    <h3 className={`text-xl font-bold text-foreground ${className}`}>
       {children}
     </h3>
   );
@@ -26,7 +26,7 @@ export function CardTitle({ children, className = "" }: { children: React.ReactN
 
 export function CardContent({ children, className = "" }: { children: React.ReactNode; className?: string }) {
   return (
-    <div className={`p-6 text-[var(--muted-foreground)] ${className}`}>
+    <div className={`p-6 text-muted-foreground ${className}`}>
       {children}
     </div>
   );

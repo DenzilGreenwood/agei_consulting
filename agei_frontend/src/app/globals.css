@@ -1,42 +1,142 @@
 @import "tailwindcss";
+@plugin "@tailwindcss/typography";
+
+@custom-variant dark (&:is(.dark *));
 
 :root {
-  --background: #0d1117; /* GitHub Dark Dimmed inspired */
-  --foreground: #e6edf3;
-  --muted: #21262d;
-  --muted-foreground: #8b949e;
-  --border: #30363d;
-  --accent: #58a6ff; /* Professional blue */
-  --accent-foreground: #ffffff;
-  --card: #161b22;
-  --card-foreground: #e6edf3;
+  /* Surface & Base Colors */
+  --background: #FFFFFF;
+  --foreground: #0F172A;
+
+  --card: #FFFFFF;
+  --card-foreground: #0F172A;
+
+  --popover: #FFFFFF;
+  --popover-foreground: #0F172A;
+
+  /* Primary Brand Action (Sky 600 for contrast on light backgrounds) */
+  --primary: #0284C7;
+  --primary-foreground: #FFFFFF;
+
+  /* Secondary Elements & Subtle Backgrounds */
+  --secondary: #F1F5F9;
+  --secondary-foreground: #0F172A;
+
+  --muted: #F8FAFC;
+  --muted-foreground: #64748B;
+
+  --accent: #E2E8F0;
+  --accent-foreground: #0F172A;
+
+  /* Feedback Colors (WCAG Compliant) */
+  --destructive: #DC2626;
+  --destructive-foreground: #FFFFFF;
+
+  --success: #15803D;
+  --success-foreground: #FFFFFF;
+
+  --warning: #D97706;
+  --warning-foreground: #FFFFFF;
+
+  --info: #0284C7;
+  --info-foreground: #FFFFFF;
+
+  /* Borders & Inputs */
+  --border: #E2E8F0;
+  --input: #E2E8F0;
+  --ring: #0284C7;
+
+  --radius: 0.5rem;
+}
+
+.dark {
+  /* Surface Layering (Slightly darker base background lets cards stand out) */
+  --background: #0B0F17;
+  --foreground: #F8FAFC;
+
+  --card: #161F2E;
+  --card-foreground: #F8FAFC;
+
+  --popover: #161F2E;
+  --popover-foreground: #F8FAFC;
+
+  /* Primary Brand Action (Sky 400 pops beautifully against dark surfaces) */
+  --primary: #38BDF8;
+  --primary-foreground: #0F172A;
+
+  /* Secondary Elements & Subtle Backgrounds */
+  --secondary: #1E293B;
+  --secondary-foreground: #F8FAFC;
+
+  --muted: #1E293B;
+  --muted-foreground: #94A3B8;
+
+  --accent: #334155;
+  --accent-foreground: #F8FAFC;
+
+  /* Feedback Colors */
+  --destructive: #EF4444;
+  --destructive-foreground: #FFFFFF;
+
+  --success: #10B981;
+  --success-foreground: #0F172A;
+
+  --warning: #F59E0B;
+  --warning-foreground: #0F172A;
+
+  --info: #38BDF8;
+  --info-foreground: #0F172A;
+
+  /* Borders & Focus Rings */
+  --border: #243044;
+  --input: #243044;
+  --ring: #38BDF8;
 }
 
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --color-muted: var(--muted);
-  --color-muted-foreground: var(--muted-foreground);
-  --color-border: var(--border);
-  --color-accent: var(--accent);
-  --color-accent-foreground: var(--accent-foreground);
   --color-card: var(--card);
   --color-card-foreground: var(--card-foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
+  --color-success: var(--success);
+  --color-success-foreground: var(--success-foreground);
+  --color-warning: var(--warning);
+  --color-warning-foreground: var(--warning-foreground);
+  --color-info: var(--info);
+  --color-info-foreground: var(--info-foreground);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
 }
 
-body {
-  background-color: var(--background);
-  color: var(--foreground);
-  font-family: var(--font-geist-sans), sans-serif;
-  line-height: 1.6;
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+
+  body {
+    @apply bg-background text-foreground;
+  }
 }
 
-/* Glassmorphism utility */
-.glass {
-  background: rgba(22, 27, 34, 0.6);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
-  border: 1px solid rgba(48, 54, 61, 0.5);
+@layer components {
+  .timeline-badge {
+    @apply text-violet-50 bg-indigo-950/45 px-3 py-1 rounded-full text-sm font-semibold mt-2 md:mt-0;
+  }
 }

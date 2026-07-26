@@ -5,6 +5,7 @@
 
 # Build Docs and docs
 /.docs
+/public/docs/*
 
 # Python
 __pycache__/
