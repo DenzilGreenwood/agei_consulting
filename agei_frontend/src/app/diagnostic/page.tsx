@@ -10,6 +10,7 @@ export default function IntakePage() {
     name: '',
     email: '',
     phone: '',
+    organization_name: '',
     problem_statement: '',
     selected_tier: 0
   });
@@ -41,8 +42,38 @@ export default function IntakePage() {
       alert('Please select a risk tier that best describes your situation.');
       return;
     }
-    // Simulate submission to CPOS backend
-    console.log('Submitting Intake to CPOS:', formData);
+    
+    // Attempt to save to CPOS Local Storage to simulate database insertion
+    try {
+      const activeOrgId = localStorage.getItem('cpos_active_org_id');
+      if (activeOrgId) {
+        const key = `cpos_workspace_state_${activeOrgId}`;
+        const stored = localStorage.getItem(key);
+        if (stored) {
+          const state = JSON.parse(stored);
+          const newDoc = {
+            id: `doc-intake-${Date.now()}`,
+            type: 'Intake Submission',
+            title: `Intake Submission: ${formData.name}`,
+            content: formData.problem_statement,
+            status: 'Signed',
+            created_at: new Date().toISOString(),
+            updated_at: new Date().toISOString(),
+            stakeholder_ids: [],
+            linked_capsule_ids: [],
+            template_variables: {
+              assurance_profile_target: formData.selected_tier,
+              organization_name: formData.organization_name
+            }
+          };
+          state.org_documents = [newDoc, ...(state.org_documents || [])];
+          localStorage.setItem(key, JSON.stringify(state));
+        }
+      }
+    } catch (error) {
+      console.error("Failed to save intake to local storage", error);
+    }
+
     setIsSubmitted(true);
   };
 
@@ -151,6 +182,17 @@ export default function IntakePage() {
             <h2 className="text-lg font-semibold mb-2">Principal Contact Details</h2>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div className="space-y-2">
+                <label className="text-sm font-medium">Organization Name</label>
+                <input
+                  required
+                  type="text"
+                  value={formData.organization_name}
+                  onChange={(e) => setFormData({ ...formData, organization_name: e.target.value })}
+                  className="w-full bg-background border border-input rounded-md px-4 py-2.5 text-sm focus:ring-2 focus:ring-primary focus:border-transparent transition-all"
+                  placeholder="e.g. Acme Corp"
+                />
+              </div>
+              <div className="space-y-2">
                 <label className="text-sm font-medium">Full Name</label>
                 <input
                   required
@@ -172,7 +214,7 @@ export default function IntakePage() {
                   placeholder="jane@company.com"
                 />
               </div>
-              <div className="space-y-2 md:col-span-2">
+              <div className="space-y-2 md:col-span-1">
                 <label className="text-sm font-medium">Phone Number</label>
                 <input
                   required

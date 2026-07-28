@@ -3,6 +3,7 @@
 import React, { createContext, useContext, useState, useEffect, useCallback } from 'react';
 import { SetupState, Organization, Principal, DynamicForm, DynamicFormSubmission } from './types';
 import { initialSetupState } from './mockData';
+import { supabase } from '../supabaseClient';
 
 interface SetupContextProps {
   state: SetupState;
@@ -11,39 +12,69 @@ interface SetupContextProps {
   addForm: (form: DynamicForm) => void;
   updateForm: (form: DynamicForm) => void;
   addSubmission: (sub: DynamicFormSubmission) => void;
+  updateSettings: (settings: { sla_hours: number }) => void;
   resetState: () => void;
 }
 
 const SetupContext = createContext<SetupContextProps | undefined>(undefined);
 
 export const SetupProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-  const [state, setState] = useState<SetupState>(initialSetupState);
+  const [state, setState] = useState<SetupState>({
+    organizations: [],
+    principals: [],
+    forms: [],
+    submissions: [],
+    settings: { sla_hours: 1 }
+  });
   const [isLoaded, setIsLoaded] = useState(false);
 
-  useEffect(() => {
-    const stored = localStorage.getItem('cpos_setup_state');
-    if (stored) {
-      try {
-        setState(JSON.parse(stored));
-      } catch (e) {
-        console.error('Failed to parse stored setup state', e);
-      }
+  const fetchInitialData = async () => {
+    try {
+      const { data: orgs } = await supabase.from('organizations').select('*');
+      const { data: principals } = await supabase.from('principals').select('*');
+
+      setState(prev => ({
+        ...prev,
+        organizations: orgs || [],
+        principals: principals || []
+      }));
+    } catch (e) {
+      console.error('Failed to fetch setup state from Supabase', e);
+    } finally {
+      setIsLoaded(true);
     }
-    setIsLoaded(true);
+  };
+
+  useEffect(() => {
+    fetchInitialData();
   }, []);
 
-  useEffect(() => {
-    if (isLoaded) {
-      localStorage.setItem('cpos_setup_state', JSON.stringify(state));
+  const addOrganization = useCallback(async (org: Organization) => {
+    const { error } = await supabase.from('organizations').insert({
+      id: org.id,
+      name: org.name,
+      domain: org.domain
+    });
+    if (!error) {
+      setState(prev => ({ ...prev, organizations: [org, ...prev.organizations] }));
+    } else {
+      console.error(error);
     }
-  }, [state, isLoaded]);
-
-  const addOrganization = useCallback((org: Organization) => {
-    setState(prev => ({ ...prev, organizations: [org, ...prev.organizations] }));
   }, []);
 
-  const addPrincipal = useCallback((prin: Principal) => {
-    setState(prev => ({ ...prev, principals: [prin, ...prev.principals] }));
+  const addPrincipal = useCallback(async (prin: Principal) => {
+    const { error } = await supabase.from('principals').insert({
+      id: prin.id,
+      organization_id: prin.organization_id,
+      name: prin.name,
+      email: prin.email,
+      role: prin.role
+    });
+    if (!error) {
+      setState(prev => ({ ...prev, principals: [prin, ...prev.principals] }));
+    } else {
+      console.error(error);
+    }
   }, []);
 
   const addForm = useCallback((form: DynamicForm) => {
@@ -61,9 +92,12 @@ export const SetupProvider: React.FC<{ children: React.ReactNode }> = ({ childre
     setState(prev => ({ ...prev, submissions: [sub, ...prev.submissions] }));
   }, []);
 
+  const updateSettings = useCallback((settings: { sla_hours: number }) => {
+    setState(prev => ({ ...prev, settings }));
+  }, []);
+
   const resetState = useCallback(() => {
-    setState(initialSetupState);
-    localStorage.removeItem('cpos_setup_state');
+    fetchInitialData();
   }, []);
 
   if (!isLoaded) return null;
@@ -77,6 +111,7 @@ export const SetupProvider: React.FC<{ children: React.ReactNode }> = ({ childre
         addForm,
         updateForm,
         addSubmission,
+        updateSettings,
         resetState,
       }}
     >

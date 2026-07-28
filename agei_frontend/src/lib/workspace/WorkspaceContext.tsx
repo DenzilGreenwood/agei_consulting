@@ -1,8 +1,8 @@
 'use client';
 
 import React, { createContext, useContext, useState, useEffect, useCallback } from 'react';
-import { WorkspaceState, Journal, Capsule, Deliverable, Objective, Stakeholder, Outcome } from './types';
-import { initialMockData } from './mockData';
+import { WorkspaceState, Journal, Capsule, Deliverable, Objective, Stakeholder, Outcome, OrganizationDocument } from './types';
+import { supabase } from '../supabaseClient';
 
 interface WorkspaceContextProps {
   state: WorkspaceState;
@@ -29,148 +29,124 @@ interface WorkspaceContextProps {
 const WorkspaceContext = createContext<WorkspaceContextProps | undefined>(undefined);
 
 export const WorkspaceProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-  const [state, setState] = useState<WorkspaceState>(initialMockData);
+  const [state, setState] = useState<WorkspaceState>({
+    stakeholders: [],
+    objectives: [],
+    journals: [],
+    capsules: [],
+    deliverables: [],
+    outcomes: [],
+    org_documents: []
+  });
   const [isLoaded, setIsLoaded] = useState(false);
+  const [activeOrgId, setActiveOrgId] = useState<string | null>(null);
 
-  const [storageKey, setStorageKey] = useState('cpos_workspace_state');
+  const fetchWorkspaceData = async (orgId: string) => {
+    try {
+      const [
+        { data: stakeholders },
+        { data: objectives },
+        { data: journals },
+        { data: capsules },
+        { data: deliverables },
+        { data: outcomes },
+        { data: org_documents }
+      ] = await Promise.all([
+        supabase.from('stakeholders').select('*').eq('organization_id', orgId),
+        supabase.from('objectives').select('*').eq('organization_id', orgId),
+        supabase.from('journals').select('*').eq('organization_id', orgId),
+        supabase.from('capsules').select('*').eq('organization_id', orgId),
+        supabase.from('deliverables').select('*').eq('organization_id', orgId),
+        supabase.from('outcomes').select('*').eq('organization_id', orgId),
+        supabase.from('org_documents').select('*').eq('organization_id', orgId)
+      ]);
 
-  // Determine active org and load from local storage
+      setState({
+        stakeholders: stakeholders || [],
+        objectives: objectives || [],
+        journals: journals || [],
+        capsules: capsules || [],
+        deliverables: deliverables || [],
+        outcomes: outcomes || [],
+        org_documents: org_documents || []
+      });
+    } catch (e) {
+      console.error('Failed to load workspace from Supabase', e);
+    } finally {
+      setIsLoaded(true);
+    }
+  };
+
   useEffect(() => {
-    const activeOrgId = localStorage.getItem('cpos_active_org_id');
-    const key = activeOrgId ? `cpos_workspace_state_${activeOrgId}` : 'cpos_workspace_state';
-    setStorageKey(key);
-
-    const stored = localStorage.getItem(key);
-    if (stored) {
-      try {
-        setState(JSON.parse(stored));
-      } catch (e) {
-        console.error('Failed to parse stored workspace state', e);
-      }
+    const orgId = localStorage.getItem('cpos_active_org_id');
+    if (orgId) {
+      setActiveOrgId(orgId);
+      fetchWorkspaceData(orgId);
     } else {
-      // If no stored state for this org, reset to initial mock data
-      setState(initialMockData);
+      setIsLoaded(true);
     }
-    setIsLoaded(true);
   }, []);
 
-  // Save to local storage whenever state changes
-  useEffect(() => {
-    if (isLoaded) {
-      localStorage.setItem(storageKey, JSON.stringify(state));
+  const addEntity = async (table: string, payload: any, stateKey: keyof WorkspaceState) => {
+    if (!activeOrgId) return;
+    const { error } = await supabase.from(table).insert({ ...payload, organization_id: activeOrgId });
+    if (!error) {
+      setState(prev => ({ ...prev, [stateKey]: [payload, ...prev[stateKey] as any[]] }));
+    } else {
+      console.error(error);
     }
-  }, [state, isLoaded, storageKey]);
+  };
 
-  const addJournal = useCallback((journal: Journal) => {
-    setState(prev => ({ ...prev, journals: [journal, ...prev.journals] }));
-  }, []);
+  const updateEntity = async (table: string, payload: any, stateKey: keyof WorkspaceState) => {
+    const { error } = await supabase.from(table).update(payload).eq('id', payload.id);
+    if (!error) {
+      setState(prev => ({
+        ...prev,
+        [stateKey]: (prev[stateKey] as any[]).map((item: any) => item.id === payload.id ? payload : item)
+      }));
+    } else {
+      console.error(error);
+    }
+  };
 
-  const updateJournal = useCallback((journal: Journal) => {
-    setState(prev => ({
-      ...prev,
-      journals: prev.journals.map(j => (j.id === journal.id ? journal : j))
-    }));
-  }, []);
+  const deleteEntity = async (table: string, id: string, stateKey: keyof WorkspaceState) => {
+    const { error } = await supabase.from(table).delete().eq('id', id);
+    if (!error) {
+      setState(prev => ({
+        ...prev,
+        [stateKey]: (prev[stateKey] as any[]).filter((item: any) => item.id !== id)
+      }));
+    } else {
+      console.error(error);
+    }
+  };
 
-  const deleteJournal = useCallback((id: string) => {
-    setState(prev => ({
-      ...prev,
-      journals: prev.journals.filter(j => j.id !== id),
-      // Cascading delete: remove all capsules associated with this journal
-      capsules: prev.capsules.filter(c => c.source_journal_id !== id)
-    }));
-  }, []);
+  const addJournal = useCallback((journal: Journal) => addEntity('journals', journal, 'journals'), [activeOrgId]);
+  const updateJournal = useCallback((journal: Journal) => updateEntity('journals', journal, 'journals'), []);
+  const deleteJournal = useCallback((id: string) => deleteEntity('journals', id, 'journals'), []);
 
-  const addCapsule = useCallback((capsule: Capsule) => {
-    setState(prev => ({ ...prev, capsules: [capsule, ...prev.capsules] }));
-  }, []);
+  const addCapsule = useCallback((capsule: Capsule) => addEntity('capsules', capsule, 'capsules'), [activeOrgId]);
+  const updateCapsule = useCallback((capsule: Capsule) => updateEntity('capsules', capsule, 'capsules'), []);
+  const deleteCapsule = useCallback((id: string) => deleteEntity('capsules', id, 'capsules'), []);
 
-  const updateCapsule = useCallback((capsule: Capsule) => {
-    setState(prev => ({
-      ...prev,
-      capsules: prev.capsules.map(c => (c.id === capsule.id ? capsule : c))
-    }));
-  }, []);
+  const updateDeliverable = useCallback((deliverable: Deliverable) => updateEntity('deliverables', deliverable, 'deliverables'), []);
+  const updateObjective = useCallback((objective: Objective) => updateEntity('objectives', objective, 'objectives'), []);
 
-  const deleteCapsule = useCallback((id: string) => {
-    setState(prev => ({
-      ...prev,
-      capsules: prev.capsules.filter(c => c.id !== id)
-    }));
-  }, []);
+  const addOutcome = useCallback((outcome: Outcome) => addEntity('outcomes', outcome, 'outcomes'), [activeOrgId]);
+  const updateOutcome = useCallback((outcome: Outcome) => updateEntity('outcomes', outcome, 'outcomes'), []);
+  const deleteOutcome = useCallback((id: string) => deleteEntity('outcomes', id, 'outcomes'), []);
 
-  const updateDeliverable = useCallback((deliverable: Deliverable) => {
-    setState(prev => ({
-      ...prev,
-      deliverables: prev.deliverables.map(d => (d.id === deliverable.id ? deliverable : d))
-    }));
-  }, []);
+  const addStakeholder = useCallback((stakeholder: Stakeholder) => addEntity('stakeholders', stakeholder, 'stakeholders'), [activeOrgId]);
+  const updateStakeholder = useCallback((stakeholder: Stakeholder) => updateEntity('stakeholders', stakeholder, 'stakeholders'), []);
+  const deleteStakeholder = useCallback((id: string) => deleteEntity('stakeholders', id, 'stakeholders'), []);
 
-  const updateObjective = useCallback((objective: Objective) => {
-    setState(prev => ({
-      ...prev,
-      objectives: prev.objectives.map(o => (o.id === objective.id ? objective : o))
-    }));
-  }, []);
-
-  const addOutcome = useCallback((outcome: Outcome) => {
-    setState(prev => ({ ...prev, outcomes: [outcome, ...prev.outcomes] }));
-  }, []);
-
-  const updateOutcome = useCallback((outcome: Outcome) => {
-    setState(prev => ({
-      ...prev,
-      outcomes: prev.outcomes.map(o => (o.id === outcome.id ? outcome : o))
-    }));
-  }, []);
-
-  const deleteOutcome = useCallback((id: string) => {
-    setState(prev => ({
-      ...prev,
-      outcomes: prev.outcomes.filter(o => o.id !== id)
-    }));
-  }, []);
-
-  const addStakeholder = useCallback((stakeholder: Stakeholder) => {
-    setState(prev => ({ ...prev, stakeholders: [stakeholder, ...prev.stakeholders] }));
-  }, []);
-
-  const updateStakeholder = useCallback((stakeholder: Stakeholder) => {
-    setState(prev => ({
-      ...prev,
-      stakeholders: prev.stakeholders.map(s => (s.id === stakeholder.id ? stakeholder : s))
-    }));
-  }, []);
-
-  const deleteStakeholder = useCallback((id: string) => {
-    setState(prev => ({
-      ...prev,
-      stakeholders: prev.stakeholders.filter(s => s.id !== id)
-    }));
-  }, []);
-
-  const addOrgDocument = useCallback((doc: OrganizationDocument) => {
-    setState(prev => ({ ...prev, org_documents: [doc, ...prev.org_documents] }));
-  }, []);
-
-  const updateOrgDocument = useCallback((doc: OrganizationDocument) => {
-    setState(prev => ({
-      ...prev,
-      org_documents: prev.org_documents.map(d => (d.id === doc.id ? doc : d))
-    }));
-  }, []);
-
-  const deleteOrgDocument = useCallback((id: string) => {
-    setState(prev => ({
-      ...prev,
-      org_documents: prev.org_documents.filter(d => d.id !== id)
-    }));
-  }, []);
+  const addOrgDocument = useCallback((doc: OrganizationDocument) => addEntity('org_documents', doc, 'org_documents'), [activeOrgId]);
+  const updateOrgDocument = useCallback((doc: OrganizationDocument) => updateEntity('org_documents', doc, 'org_documents'), []);
+  const deleteOrgDocument = useCallback((id: string) => deleteEntity('org_documents', id, 'org_documents'), []);
 
   const resetState = useCallback(() => {
-    setState(initialMockData);
-    localStorage.removeItem(storageKey);
-  }, [storageKey]);
+    if (activeOrgId) fetchWorkspaceData(activeOrgId);
+  }, [activeOrgId]);
 
   if (!isLoaded) return null;
 

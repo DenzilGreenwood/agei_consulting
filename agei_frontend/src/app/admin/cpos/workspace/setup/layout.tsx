@@ -4,12 +4,13 @@ import React from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { SetupProvider } from '@/lib/setup/SetupContext';
-import { Building2, Users, LayoutTemplate, ArrowLeft } from 'lucide-react';
+import { Building2, Users, LayoutTemplate, ArrowLeft, Settings } from 'lucide-react';
 
 export default function SetupLayout({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
 
   const navItems = [
+    { name: 'Global Settings', href: '/admin/cpos/workspace/setup/settings', icon: Settings },
     { name: 'Organizations', href: '/admin/cpos/workspace/setup/organizations', icon: Building2 },
     { name: 'Users (Principals)', href: '/admin/cpos/workspace/setup/users', icon: Users },
     { name: 'Form Builder', href: '/admin/cpos/workspace/setup/forms', icon: LayoutTemplate },

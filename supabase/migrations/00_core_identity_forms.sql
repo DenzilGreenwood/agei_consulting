@@ -8,6 +8,11 @@ CREATE TABLE public.organizations (
 );
 
 -- 2. Principals (Users)
+-- admin - admin of the core system
+-- consultant - consultant of the core system
+-- client_executive - executive of the client of the organization read only access with minimal access to information
+-- client_engineer - engineer of the client of the organization read only access with minimal access to information
+-- auditors and regulators should be handled in a separate schema where they use JWT token for access with read only access
 CREATE TABLE public.principals (
     id uuid NOT NULL DEFAULT gen_random_uuid(),
     organization_id uuid NOT NULL REFERENCES public.organizations(id) ON DELETE CASCADE,
@@ -60,3 +65,19 @@ ALTER TABLE public.organizations ENABLE ROW LEVEL SECURITY;
 ALTER TABLE public.principals ENABLE ROW LEVEL SECURITY;
 ALTER TABLE public.dynamic_forms ENABLE ROW LEVEL SECURITY;
 ALTER TABLE public.dynamic_form_submissions ENABLE ROW LEVEL SECURITY;
+
+-- 5. Helper Functions
+CREATE OR REPLACE FUNCTION public.is_org_member(org_id uuid)
+RETURNS boolean AS $$
+BEGIN
+  RETURN true; -- Placeholder for demo
+END;
+$$ LANGUAGE plpgsql SECURITY DEFINER;
+
+CREATE OR REPLACE FUNCTION public.enforce_worm_invariant()
+RETURNS trigger AS $$
+BEGIN
+  RAISE EXCEPTION 'Updates and deletes are not allowed on this table (WORM enforced).';
+  RETURN NULL;
+END;
+$$ LANGUAGE plpgsql;

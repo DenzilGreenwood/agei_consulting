@@ -1,11 +1,22 @@
 'use client';
 
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { useWorkspace } from '@/lib/workspace/WorkspaceContext';
+import { useSetup } from '@/lib/setup/SetupContext';
 import { Users, Target, Activity, FileDown, AlertTriangle, Clock } from 'lucide-react';
 
 export default function WorkspaceDashboard() {
   const { state } = useWorkspace();
+  const { state: setupState } = useSetup();
+  const [activeOrgName, setActiveOrgName] = useState("Client X");
+
+  useEffect(() => {
+    const activeOrgId = localStorage.getItem('cpos_active_org_id');
+    if (activeOrgId) {
+      const org = setupState.organizations.find(o => o.id === activeOrgId);
+      if (org) setActiveOrgName(org.name);
+    }
+  }, [setupState.organizations]);
 
   // 1. Metrics Strip Calculations
   const totalStakeholders = state.stakeholders.length;
@@ -36,11 +47,15 @@ export default function WorkspaceDashboard() {
   const highPowerChampions = state.stakeholders.filter(s => s.influence === 'High' && (s.champion_status === 'Strong Champion' || s.champion_status === 'Supportive'));
   const highPowerSkeptics = state.stakeholders.filter(s => s.influence === 'High' && (s.champion_status === 'Skeptical' || s.champion_status === 'Opposed'));
 
+  // 5. Organization Info
+  const activeIntake = (state.org_documents || []).find(d => d.type === 'Intake Submission');
+  const orgName = activeIntake?.template_variables?.organization_name || activeOrgName;
+
   return (
     <div className="space-y-6">
       <div className="flex justify-between items-center mb-2">
         <h1 className="text-2xl font-bold">Engagement Dashboard</h1>
-        <p className="text-sm text-muted-foreground">Claims Triage AI Client X Engagement</p>
+        <p className="text-sm text-muted-foreground">Claims Triage AI {orgName} Engagement</p>
       </div>
 
       {/* Metrics Strip */}

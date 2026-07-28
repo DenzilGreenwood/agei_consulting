@@ -5,7 +5,7 @@ import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { WorkspaceProvider } from '@/lib/workspace/WorkspaceContext';
 import { SetupProvider, useSetup } from '@/lib/setup/SetupContext';
-import { LayoutDashboard, Clock, FileText, FileDown, ArrowLeft, Settings, Target, Building2, Users } from 'lucide-react';
+import { LayoutDashboard, Clock, FileText, FileDown, ArrowLeft, Settings, Target, Building2, Users, Compass } from 'lucide-react';
 
 function WorkspaceTopNav() {
   const pathname = usePathname();
@@ -33,11 +33,12 @@ function WorkspaceTopNav() {
 
   const navItems = [
     { name: 'Dashboard', href: '/admin/cpos/workspace', icon: LayoutDashboard },
+    { name: 'Discovery', href: '/admin/cpos/workspace/discovery', icon: Compass },
+    { name: 'Stakeholders', href: '/admin/cpos/workspace/stakeholders', icon: Users },
+    { name: 'Deliverables', href: '/admin/cpos/workspace/deliverables', icon: FileDown },
     { name: 'Timeline', href: '/admin/cpos/workspace/timeline', icon: Clock },
     { name: 'Journals', href: '/admin/cpos/workspace/journals', icon: FileText },
-    { name: 'Deliverables', href: '/admin/cpos/workspace/deliverables', icon: FileDown },
     { name: 'Outcomes', href: '/admin/cpos/workspace/outcomes', icon: Target },
-    { name: 'Stakeholders', href: '/admin/cpos/workspace/stakeholders', icon: Users },
     { name: 'Setup', href: '/admin/cpos/workspace/setup/organizations', icon: Settings },
   ];
 
@@ -57,11 +58,10 @@ function WorkspaceTopNav() {
                 <Link
                   key={item.name}
                   href={item.href}
-                  className={`flex items-center gap-2 px-4 py-2 text-sm font-medium rounded-md transition-colors ${
-                    isActive
-                      ? 'bg-primary/10 text-primary'
-                      : 'text-muted-foreground hover:bg-muted hover:text-foreground'
-                  }`}
+                  className={`flex items-center gap-2 px-4 py-2 text-sm font-medium rounded-md transition-colors ${isActive
+                    ? 'bg-primary/10 text-primary'
+                    : 'text-muted-foreground hover:bg-muted hover:text-foreground'
+                    }`}
                 >
                   <Icon className="h-4 w-4" />
                   {item.name}
@@ -70,11 +70,11 @@ function WorkspaceTopNav() {
             })}
           </div>
         </div>
-        
+
         {/* Organization Selector */}
         <div className="flex items-center gap-2">
           <Building2 className="h-4 w-4 text-muted-foreground" />
-          <select 
+          <select
             value={activeOrgId}
             onChange={handleOrgChange}
             className="text-sm bg-muted text-foreground border-none rounded-md px-2 py-1 outline-none cursor-pointer focus:ring-1 focus:ring-primary"

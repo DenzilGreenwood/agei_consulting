@@ -110,6 +110,19 @@ export interface OrganizationDocument {
     engagement_fee?: number;
     target_timeline_weeks?: number;
     assurance_profile_target?: 1 | 2 | 3;
+    organization_name?: string;
+    discovery_notes?: string;
+    pipeline_status?: 'New' | 'Contacted' | 'Discovery Scheduled' | 'Discovery Completed' | 'Qualified' | 'Passed' | 'On Hold';
+    bant?: {
+      budget_status?: 'Allocated' | 'Tentative' | 'Not allocated';
+      budget_band?: string;
+      primary_decision_maker_name?: string;
+      primary_decision_maker_role?: string;
+      procurement_required?: 'Yes' | 'No' | 'Unknown';
+      impact_if_unsolved?: string;
+      trigger_event?: string;
+      target_start_window?: string;
+    };
   };
 
   cryptographic_metadata?: {

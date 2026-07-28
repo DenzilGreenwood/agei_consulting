@@ -54,4 +54,7 @@ export interface SetupState {
   principals: Principal[];
   forms: DynamicForm[];
   submissions: DynamicFormSubmission[];
+  settings?: {
+    sla_hours: number;
+  };
 }
