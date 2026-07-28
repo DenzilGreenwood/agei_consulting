@@ -1,5 +1,6 @@
 import Link from 'next/link';
 import { ArrowLeft, RefreshCcw } from 'lucide-react';
+import { Mermaid } from '@/components/Mermaid';
 
 export const metadata = {
   title: 'Real-Time Transactional Attestation Architecture | AGEI',
@@ -38,52 +39,41 @@ export default function AttestationPage() {
       <div className="prose prose-slate dark:prose-invert max-w-none">
         <h2>1. Executive Summary</h2>
         <p>
-          This architecture specification outlines the deployment model for organizations that require absolute data custody and on-premise database control, while demanding mathematically non-repudiable, third-party verifiable audits.
+          This architecture specification outlines the deployment model for organizations that require strong data custody and on-premise database control, while demanding cryptographically verifiable, third-party audits.
         </p>
         <p>
           Under the Hybrid Cryptographic Assurance Model, the client hosts and maintains the complete 60-table Relational Evidence Graph [254] on their own secure local servers (e.g., via on-premise PostgreSQL/Supabase) [250]. To prevent local administrators or malicious actors from retroactively modifying, deleting, or injecting local records (i.e., Cognitive Tampering), the local system enforces a <strong>Real-Time Transactional Attestation Pipeline</strong>.
         </p>
         <p>
-          Every security-relevant database interaction—including user logins [70], administrative authorization overrides [81, 120], policy revisions [107], and model execution receipts [111]—is converted into a cryptographically sealed, canonicalized attestation payload. This payload is committed synchronously or near-real-time asynchronously to the CognitiveInsight Cloud Attestation Server. The cloud server acts as an independent, append-only Zero-Knowledge Trust Anchor, storing only irreversible hashes, digital signatures, and structural metadata. This architecture ensures absolute client privacy while providing instant, tamper-detection capabilities that can withstand skeptical external audits [135, 139].
+          Every security-relevant database interaction—including user logins [70], administrative authorization overrides [81, 120], policy revisions [107], and model execution receipts [111]—is converted into a cryptographically sealed, canonicalized attestation payload. This payload is committed synchronously or near-real-time asynchronously to the CognitiveInsight Cloud Attestation Server. The cloud server acts as an independent, append-only Zero-Knowledge Trust Anchor, storing only irreversible hashes, digital signatures, and structural metadata. This protocol is designed to preserve client privacy while supporting near-real-time tamper detection that can withstand skeptical external audits [135, 139].
         </p>
 
         <h2>2. Structural Architecture: The Split-State Invariant</h2>
         <p>
-          To achieve both absolute privacy and indisputable verification, the system splits its state space across two physical boundaries:
+          To achieve both strong client data privacy and third-party verifiability, the system splits its state space across two physical boundaries:
         </p>
 
-        <pre><code>{`[ PRIVATE CLIENT PERIMETER (ON-PREMISE) ]                   [ COGNITIVEINSIGHT (CLOUD) ]
-(Absolute Custody of Raw Text, PII & Secrets)              (Independent Trust Anchor Ledger)
+        <Mermaid chart={`graph TD
+subgraph Client["PRIVATE CLIENT PERIMETER (ON-PREMISE)<br/>On-premise custody of raw text, PII, and secrets"]
+  Event["Operational AI Event"]
+  DBLogs[("Local Supabase DB (On-Prem)<br/>──────────────────────<br/>- Raw Context / Prompt logs<br/>- Policy Evaluations<br/>- Detailed Audit rows")]
+  SDKProc["Local Sidecar SDK Daemon<br/>──────────────────────<br/>- Canonicalizes (RFC 8785)<br/>- Generates SHA-256 Hash<br/>- Signs with Ed25519"]
+  
+  Event --> DBLogs
+  DBLogs -->|1. Database Trigger Captures Event| SDKProc
+end
 
-  Operational AI Event
-          │
-          ▼
-  ┌────────────────────────────────┐
-  │ Local Supabase DB (On-Prem)    │
-  ├────────────────────────────────┤
-  │ - Raw Context / Prompt logs    │
-  │ - Policy Evaluations           │
-  │ - Detailed Audit database rows │
-  └──────────────┬─────────────────┘
-                 │
-                 │ (1. Database Trigger Captures Event)
-                 ▼
-  ┌────────────────────────────────┐
-  │ Local Sidecar SDK Daemon       │
-  ├────────────────────────────────┤
-  │ - Canonicalizes (RFC 8785)     │
-  │ - Generates SHA-256 Hash       │
-  │ - Signs with Ed25519           │
-  └──────────────┬─────────────────┘
-                 │
-                 │ (2. Out-of-Band Real-Time HTTPS POST)
-                 └────────────────────────────────────────► ┌─────────────────────────────┐
-                                                            │ Cloud Attestation Server    │
-                                                            ├─────────────────────────────┤
-                                                            │ - Verifies Client Signature │
-                                                            │ - Commits Seal to WORM DB   │
-                                                            │ - No Plain Text or PII      │
-                                                            └─────────────────────────────┘`}</code></pre>
+subgraph Cloud["COGNITIVEINSIGHT (CLOUD)"]
+  CloudProc[("Cloud Attestation Server<br/>──────────────────────<br/>- Verifies Client Signature<br/>- Commits Seal to WORM DB<br/>- No Plain Text or PII")]
+end
+
+SDKProc -->|2. Out-of-Band Real-Time HTTPS POST| CloudProc
+
+style Client stroke:#818cf8,fill:#eef2ff
+style Cloud stroke:#a78bfa,fill:#f5f3ff
+style DBLogs stroke:#fb923c,fill:#fff7ed
+style SDKProc stroke:#4ade80,fill:#f0fdf4
+style CloudProc stroke:#e879f9,fill:#fdf4ff`} />
 
         <h3>2.1 The On-Premise Boundary (Context and Lineage Space)</h3>
         <p>
@@ -101,7 +91,7 @@ export default function AttestationPage() {
         </p>
         <ul>
           <li><strong>Target Tables:</strong> <code>public.receipt_batch_anchors</code> [73] and a simplified transactional seal ledger.</li>
-          <li><strong>Information Contained:</strong> Only cryptographic seals (SHA-256 hashes, Ed25519 signatures, timestamp bounds, client ID, and sequence sequence numbers) [111, 264]. No plain text, raw prompts, model definitions, or user personal data is ever committed to our cloud.</li>
+          <li><strong>Information Contained:</strong> Only cryptographic seals (SHA-256 hashes, Ed25519 signatures, timestamp bounds, client ID, and sequence sequence numbers) [111, 264]. No personal data is committed to the external attestation layer.</li>
         </ul>
 
         <h2>3. Real-Time Ingestion Pipeline: The Sidecar Trigger Model</h2>
@@ -210,10 +200,19 @@ CREATE TRIGGER queue_receipt_attestation
           When an auditor executes a Verification Job [266] on the on-premise portal, the backend performs a programmatic cross-comparison with the Cloud Attestation ledger:
         </p>
 
-        <pre><code>{`[ ON-PREM DATABASE ]                                        [ CLOUD LEDGER ]
-Row ID: c3e1a052...                                         Event ID: c3e1a052...
-Local Hash: sha256:d8e8f8...   ◄─── [Compare Hashes] ───►   Attested Hash: sha256:d8e8f8...
-Local Signature: verified      ◄─ [Verify Signature] ───►   Client Signature: verified`}</code></pre>
+        <Mermaid chart={`graph LR
+subgraph OnPrem["ON-PREM DATABASE"]
+  LocalRow["Row ID: c3e1a052...<br/>Local Hash: sha256:d8e8f8...<br/>Local Signature: verified"]
+end
+subgraph Cloud["CLOUD LEDGER"]
+  AttestedRow["Event ID: c3e1a052...<br/>Attested Hash: sha256:d8e8f8...<br/>Client Signature: verified"]
+end
+
+LocalRow -->|Compare Hashes| AttestedRow
+LocalRow -->|Verify Signature| AttestedRow
+
+style OnPrem stroke:#818cf8,fill:#eef2ff
+style Cloud stroke:#a78bfa,fill:#f5f3ff`} />
 
         <h3>6.1 The Verification Outcomes</h3>
         <p>During reconciliation, the comparison engine identifies three critical risk patterns:</p>
@@ -230,8 +229,8 @@ Local Signature: verified      ◄─ [Verify Signature] ───►   Client S
             <tbody>
               <tr>
                 <td className="border-b border-border py-2 px-4 font-semibold text-emerald-600">Perfect Match</td>
-                <td className="border-b border-border py-2 px-4 text-sm">The on-premise row ID, content hash, and client signature perfectly match the record committed to the cloud.</td>
-                <td className="border-b border-border py-2 px-4 text-sm"><strong>SAFE (Green):</strong> Cryptographic verification complete. Integrity guaranteed [132].</td>
+                <td className="border-b border-border py-2 px-4 text-sm">The on-premise row ID, content hash, and client signature match the record committed to the cloud under verification.</td>
+                <td className="border-b border-border py-2 px-4 text-sm"><strong>SAFE (Green):</strong> Cryptographic verification complete. Integrity can be verified [132].</td>
               </tr>
               <tr>
                 <td className="border-b border-border py-2 px-4 font-semibold text-rose-500">Gaps / Omissions</td>
@@ -307,16 +306,8 @@ def verify_local_record_against_cloud(local_record: dict, client_key_pem: bytes)
         print("[ALERT] SIGNATURE MISMATCH: Local verification identity has been manipulated!")
         return False
 
-    print("[SUCCESS] Record verified. Absolute historical integrity guaranteed.")
+    print("[SUCCESS] Record verified. Historical integrity checks pass.")
     return True`}</code></pre>
-
-        <h2>7. Strategic Business Benefits</h2>
-        <p>By combining local database control with real-time cloud attestation, CognitiveInsight.ai delivers a unique, zero-friction commercial value proposition:</p>
-        <ul>
-          <li><strong>Eliminates "Surveillance Anxiety":</strong> Since the cloud attestation server receives only cryptographic hashes, your clients are guaranteed that CognitiveInsight never sees their proprietary data, raw prompts, model outputs, or customer details, solving GDPR and SOC2 compliance concerns [135, 180].</li>
-          <li><strong>Unbreakable Audit Trail:</strong> Traditional local system logs are mutable by system administrators (such as a rogue IT employee or compromised superuser). By committing every single transaction seal to your cloud in real time, the database becomes mathematically append-only [496]. A compromised admin can delete local database records, but the discrepancy will instantly flag as a gap during the next reconciliation audit [139].</li>
-          <li><strong>Maximum System Velocity:</strong> Decoupling the heavy raw database storage from the cloud attestation ledger keeps local query speeds incredibly high. It keeps cloud storage overhead at an absolute minimum (~200 bytes per event), meaning the system can process millions of transactions daily at near-zero hosting costs [523].</li>
-        </ul>
       </div>
     </div>
   );

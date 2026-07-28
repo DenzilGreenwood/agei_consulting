@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import { BookOpen, FileJson, FileCode2, Database, ShieldCheck, ChevronRight, LayoutGrid, Map, BookA, Activity } from 'lucide-react';
+import { BookOpen, FileJson, FileCode2, Database, ShieldCheck, ChevronRight, LayoutGrid, Map, BookA, Activity, Scale, BrainCircuit } from 'lucide-react';
 
 export const metadata = {
   title: 'Documentation Hub | AGEI',
@@ -62,6 +62,22 @@ export default function DocsLandingPage() {
       href: "/docs/attestation",
       icon: <Activity className="h-8 w-8 text-primary" />,
       color: "from-emerald-500/20 to-teal-500/10",
+      status: "Ready"
+    },
+    {
+      title: "Symmetric Audit & Attestation",
+      description: "A High-Assurance Hybrid Design Blueprint for Multi-Tenant Privacy and Circular Auditor Accountability.",
+      href: "/docs/symmetric-audit",
+      icon: <Scale className="h-8 w-8 text-primary" />,
+      color: "from-indigo-500/20 to-violet-500/10",
+      status: "Ready"
+    },
+    {
+      title: "CPOS Enterprise Blueprint",
+      description: "The Complete Advisory Delivery and Software Ingestion System | Aligned with AGEI CIAF-LCM.",
+      href: "/docs/cpos",
+      icon: <BrainCircuit className="h-8 w-8 text-primary" />,
+      color: "from-pink-500/20 to-rose-500/10",
       status: "Ready"
     }
   ];

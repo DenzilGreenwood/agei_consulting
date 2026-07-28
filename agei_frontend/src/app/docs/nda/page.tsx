@@ -1,5 +1,6 @@
 import Link from 'next/link';
-import { ArrowLeft, Lock } from 'lucide-react';
+import { ArrowLeft, ShieldCheck, Lock } from 'lucide-react';
+import { Mermaid } from '@/components/Mermaid';
 
 export const metadata = {
   title: 'AGEI Hybrid Architecture (NDA) | AGEI',
@@ -32,40 +33,44 @@ export default function NDAPage() {
 
       <div className="prose prose-slate dark:prose-invert max-w-none">
         <p>
-          To resolve the core conflict between absolute client data privacy and un-spoofable third-party verifiability, this architecture bifurcates the system into two distinct environments:
+          To resolve the core conflict between strong client data privacy and third-party verifiability, this architecture bifurcates the system into two distinct environments:
         </p>
         <ul>
-          <li><strong>The On-Premise Audit & Information Portal (Local Customer Boundary):</strong> A robust database-aligned visualization and compliance reporting application deployed within the client's firewall. Accessible via cryptographically signed JSON Web Tokens (JWTs), it serves as the human-readable portal for external auditors and internal teams.</li>
-          <li><strong>The Cloud Assertion Vault (External Attestation Server):</strong> An ultra-secure, append-only cryptographic anchoring registry managed by CognitiveInsight.ai. It contains zero cleartext data, registering only cryptographically signed Merkle Roots and event batch signatures.</li>
+          <li><strong>The On-Premise Audit & Information Portal (Local Customer Boundary):</strong> A robust database-aligned visualization and compliance reporting application deployed within the client's firewall. Accessible via cryptographically signed JSON Web Tokens (JWTs), it serves as the human-readable portal for external auditors and internal teams. An organizational interface will allow access to view and export logs for compliance and investigations purposes.</li>
+          <li><strong>The Cloud Assertion Vault (External Attestation Server):</strong> An ultra-secure, append-only cryptographic anchoring registry managed by CognitiveInsight.ai. It contains no cleartext data, registering only cryptographically signed Merkle Roots and event batch signatures.</li>
         </ul>
 
         <h2>1. Architectural System Topography</h2>
         <p>
           The topography separates the Private Context Space from the Public Attestation Space, ensuring that raw prompt telemetry, proprietary code, and sensitive corporate databases never leave the client's physical custody.
         </p>
-        <pre><code>{`                  ┌───────────────────────────────────────────────────────────┐
-                  │                ON-PREMISE SECURITY BOUNDARY               │
-                  │                                                           │
-                  │  ┌───────────────────────┐     ┌───────────────────────┐  │
-  Inference SDK  ─┼─►│  public.receipts (DB) │◄────┤   Audit Portal UI     │  │
-  & Agentic Gates │  └──────────┬────────────┘     │  (Next.js / Read-Only)│  │
-                  │             │                  └──────────▲────────────┘  │
-                  │             ▼                             │               │
-                  │      [Merkle Batcher]                     │ JWT Access    │
-                  │             │                             │ (Auditors/User)
-                  │             ▼                             │               │
-                  └─────────────┼─────────────────────────────┼───────────────┘
-                                │                             │
-                        Local   │ Signed Merkle Root          │
-                        Web     ▼                             │
-                        Push  ┌───────────────────────────────┴───────────────┐
-                              │           COGNITIVEINSIGHT.AI CLOUD           │
-                              │                                               │
-                              │  ┌─────────────────────────────────────────┐  │
-                              │  │      public.receipt_batch_anchors       │  │
-                              │  │          (External Attestation)         │  │
-                              │  └─────────────────────────────────────────┘  │
-                              └───────────────────────────────────────────────┘`}</code></pre>
+        <Mermaid chart={`graph TB
+subgraph onPremise["ON-PREMISE SECURITY BOUNDARY"]
+  SDK["Inference SDK &<br />Agentic Gates"]
+  DB[("public.receipts<br />(DB)")]
+  Batcher["Merkle Batcher"]
+  Portal["Audit Portal UI<br />(Next.js / Read-Only)"]
+                    
+  SDK -->|Inference| DB
+  DB -->|Data| Batcher
+  Batcher -->|Batched Data| Portal
+  Portal -->|Display| Portal
+end
+
+subgraph cloud["COGNITIVEINSIGHT.AI CLOUD"]
+  Attestation[("public.receipt_batch_anchors<br />(External Attestation)")]
+end
+              
+Batcher -->|Signed Merkle Root<br />Local Web Push| Attestation
+Portal -->|JWT Access<br />Auditors/User| Portal
+
+style onPremise stroke:#818cf8,fill:#eef2ff
+style cloud stroke:#a78bfa,fill:#f5f3ff
+style SDK stroke:#2dd4bf,fill:#f0fdfa
+style DB stroke:#fb923c,fill:#fff7ed
+style Batcher stroke:#4ade80,fill:#f0fdf4
+style Portal stroke:#38bdf8,fill:#f0f9ff
+style Attestation stroke:#e879f9,fill:#fdf4ff`} />
 
         <h3>1.1 Data Residency Allocations</h3>
         <div className="overflow-x-auto">
@@ -125,19 +130,19 @@ export default function NDAPage() {
         <h3>2.1 The JWT Authentication Envelope</h3>
         <p>External auditors and organizational viewers gain access via scoped JSON Web Tokens signed by the enterprise identity provider (IdP). The token payload restricts permission sets:</p>
         <pre><code className="language-json">{`{
-  "iss": "https://auth.enterprise-client.com",
-  "sub": "usr_9f8e7d6c5b",
-  "role": "auditor",
-  "org_id": "8f87e5b2-30fc-4de7-bc99-1a91e57c8bf0",
-  "permissions": [
-    "receipts:read",
-    "receipts:print",
-    "lineage:traverse",
-    "audit_packs:read",
-    "verification_jobs:run"
-  ],
-  "exp": 1785081600
-}`}</code></pre>
+            "iss": "https://auth.enterprise-client.com",
+            "sub": "usr_9f8e7d6c5b",
+            "role": "auditor",
+            "org_id": "8f87e5b2-30fc-4de7-bc99-1a91e57c8bf0",
+            "permissions": [
+              "receipts:read",
+              "receipts:print",
+              "lineage:traverse",
+              "audit_packs:read",
+              "verification_jobs:run"
+            ],
+            "exp": 1785081600
+          }`}</code></pre>
 
         <h3>2.2 Access Tier Invariants (Read-Only & Print Enforcement)</h3>
         <p>To prevent organizational viewers or guest auditors from tampering with compliance records or configuration state:</p>
@@ -147,10 +152,10 @@ export default function NDAPage() {
           <li><strong>Database Invariant:</strong> As defined in our <code>agei-database-policies-indices.sql</code> script, Row-Level Security (RLS) is applied to prevent data modification:</li>
         </ul>
         <pre><code className="language-sql">{`-- Lock down receipts to prevent any administrative updates or deletes
-CREATE POLICY restrict_auditor_mutations ON public.receipts
-  FOR UPDATE OR DELETE
-  USING (FALSE) -- Permanently denies execution
-  WITH CHECK (FALSE);`}</code></pre>
+          CREATE POLICY restrict_auditor_mutations ON public.receipts
+            FOR UPDATE OR DELETE
+            USING (FALSE) -- Permanently denies execution
+            WITH CHECK (FALSE);`}</code></pre>
 
         <h2>3. External Server Attestation Protocol</h2>
         <p>The external Attestation Server acts as a zero-knowledge notary. It registers daily or hourly cryptographic snapshots ("anchors") pushed from the on-premise system.</p>
@@ -158,44 +163,57 @@ CREATE POLICY restrict_auditor_mutations ON public.receipts
         <h3>3.1 The Attestation Ingestion Payload</h3>
         <p>When a Merkle batch is sealed on-premise, the local batcher issues an out-of-band HTTPS POST to the external Cloud Assertion Vault (<code>https://api.cognitiveinsight.ai/v1/attestation/anchor</code>). The payload is strictly limited to cryptographic proofs:</p>
         <pre><code className="language-json">{`{
-  "anchor_id": "anc:org-123:batch-4009",
-  "organization_id": "8f87e5b2-30fc-4de7-bc99-1a91e57c8bf0",
-  "batch_number": 4009,
-  "merkle_root_hash": "sha256:d8e8f8c8a8b8f8776655c4c4b3b3a2a21100f9e9d9c9b9a9332211aa00ff8877",
-  "batch_size": 1420,
-  "signature": "eddsa-ed25519:6c7a8b9d0e1f2a3b4c5d6e7f8a9b0c1d2e3f4a5b6c7d8e9f0a1b2c3d4e5f6a7b...",
-  "signing_key_fingerprint": "fp:ed25519:2026:01",
-  "anchored_at": "2026-07-26T14:30:00Z",
-  "validation_rules_version": "v2.1.0"
-}`}</code></pre>
+          "anchor_id": "anc:org-123:batch-4009",
+          "organization_id": "8f87e5b2-30fc-4de7-bc99-1a91e57c8bf0",
+          "batch_number": 4009,
+          "merkle_root_hash": "sha256:d8e8f8c8a8b8f8776655c4c4b3b3a2a21100f9e9d9c9b9a9332211aa00ff8877",
+          "batch_size": 1420,
+          "signature": "eddsa-ed25519:6c7a8b9d0e1f2a3b4c5d6e7f8a9b0c1d2e3f4a5b6c7d8e9f0a1b2c3d4e5f6a7b...",
+          "signing_key_fingerprint": "fp:ed25519:2026:01",
+          "anchored_at": "2026-07-26T14:30:00Z",
+          "validation_rules_version": "v2.1.0"
+        }`}</code></pre>
 
         <p>By storing only this payload, CognitiveInsight.ai has:</p>
         <ul>
           <li><strong>Zero view</strong> of the client's corporate data (preserving absolute GDPR/CCPA privacy boundaries).</li>
-          <li><strong>Absolute mathematical verification power</strong> (allowing any external auditor to verify that the local database hasn't been quietly edited post-event).</li>
+          <li><strong>Cryptographic verification</strong> (allowing any external auditor to verify that the local database hasn't been quietly edited post-event).</li>
         </ul>
 
         <h2>4. The Cryptographic Match-and-Compare Protocol</h2>
-        <p>When an external auditor reviews an event receipt inside the on-premise portal, they can execute a Cross-Verification Job. This job proves that the local record matches the immutable public anchor.</p>
+        <p>When an external auditor reviews an event receipt inside the on-premise portal, they can execute a Cross-Verification Job. This job proves that the local record matches the append-only public anchor.</p>
 
         <h3>4.1 Verification Lifecycle & Mathematics</h3>
-        <pre><code>{`   On-Premise Receipt        Merkle Proof Path         Cloud Attestation Server
-  ┌──────────────────┐      ┌─────────────────┐      ┌───────────────────────────┐
-  │  Content Hash:   ├─────►│ - Left Hash     ├─────►│  Registered Merkle Root   │
-  │  "sha256:a1b2"   │      │ - Right Hash    │      │  "sha256:d8e8f8..."       │
-  └──────────────────┘      │ - Root Node     │      └─────────────▲─────────────┘
-                            └────────┬────────┘                    │
-                                     │                             │ Is Match?
-                                     ▼                             │
-                              [Local Compute] ─────────────────────┘
-                              (Recomputed Root)`}</code></pre>
+        <Mermaid chart={`graph LR
+subgraph Client["On-Premise Receipt"]
+  Receipt["Content Hash:<br/>'sha256:a1b2'"]
+end
+subgraph Path["Merkle Proof Path"]
+  Proof["- Left Hash<br/>- Right Hash<br/>- Root Node"]
+end
+subgraph Attest["Cloud Attestation Server"]
+  Root["Registered Merkle Root<br/>'sha256:d8e8f8...'"]
+end
+subgraph Compute["Local Computing"]
+  Recompute["Local Compute<br/>(Recomputed Root)"]
+end
+
+Receipt --> Proof
+Proof --> Root
+Proof --> Recompute
+Recompute -->|Is Match?| Root
+
+style Client stroke:#818cf8,fill:#eef2ff
+style Path stroke:#fb923c,fill:#fff7ed
+style Compute stroke:#4ade80,fill:#f0fdf4
+style Attest stroke:#a78bfa,fill:#f5f3ff`} />
 
         <ol>
           <li><strong>Local Receipt Retrieval:</strong> The auditor selects a receipt (e.g., <code>receipt_id = 'rcpt:123'</code>) in the on-premise portal.</li>
           <li><strong>Inclusion Proof Construction:</strong> The on-premise backend fetches the <code>merkle_proof</code> path from <code>public.receipt_batch_items</code> for that receipt, which contains the coordinate hashes required to traverse the Merkle tree.</li>
           <li><strong>Recomputation:</strong> The portal recomputes the expected Merkle Root by hashing up the tree from the receipt's <code>content_hash</code> using the proof path.</li>
           <li><strong>Cloud Compare:</strong> The portal calls the CognitiveInsight Cloud API to fetch the anchored root for that batch_id.</li>
-          <li><strong>Assertion Check:</strong> The portal compares the recomputed Merkle root against the externally anchored Merkle root. If they are identical, the receipt is verified as authentic, untampered, and chronologically sealed.</li>
+          <li><strong>Assertion Check:</strong> The portal compares the recomputed Merkle root against the externally anchored Merkle root. If they are identical, the receipt is cryptographically verified against the anchored record.</li>
         </ol>
 
         <h2>5. Executable Verification Simulation (Python)</h2>
@@ -317,8 +335,8 @@ else:
         <h2>6. Regulatory & Security Auditing Benefits</h2>
         <p>This hybrid configuration satisfies standard compliance frameworks under intense audit scrutiny:</p>
         <ul>
-          <li><strong>EU AI Act - Article 12 (Traceability):</strong> Standard logs can be edited by database administrators. This protocol ensures that once a lifecycle or validation gate receipt is recorded, its record of existence is permanently anchored externally, rendering backdating or log-manipulation impossible.</li>
-          <li><strong>GDPR - Article 5 (Data Minimization) & Article 17 (Right to Erasure):</strong> The external Cloud Assertion Vault stores only Merkle roots (random hash digests). If an on-premise system needs to comply with an erasure request and shred localized data, the public ledger is unaffected, and no personal data is ever exposed to third parties.</li>
+          <li><strong>EU AI Act - Article 12 (Traceability):</strong> Standard logs can be edited by database administrators. This protocol ensures that once a lifecycle or validation gate receipt is recorded, its record of existence is permanently anchored externally, making backdating or log manipulation detectable.</li>
+          <li><strong>GDPR - Article 5 (Data Minimization) & Article 17 (Right to Erasure):</strong> The external Cloud Assertion Vault stores only Merkle roots (random hash digests). If an on-premise system needs to comply with an erasure request and shred localized data, the public ledger is unaffected, and no personal data is committed to the external attestation layer.</li>
           <li><strong>ISO/IEC 42001 (Continuous Control Enforcement):</strong> Provides proof to certification bodies that safety gates are not checked manually or retroactively; the signature and timestamp chains prove they occurred out-of-band at the exact moment of inference or model promotion.</li>
         </ul>
       </div>
