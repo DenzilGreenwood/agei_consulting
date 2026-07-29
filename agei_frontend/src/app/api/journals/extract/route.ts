@@ -3,14 +3,6 @@ import { GoogleGenAI, Type, Schema } from '@google/genai';
 import { createClient } from '@supabase/supabase-js';
 import crypto from 'crypto';
 
-// Initialize Gemini Client
-const ai = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY });
-const model = process.env.GEMINI_MODEL || 'gemini-2.0-flash'
-
-// Initialize Supabase Service Client for Audit Logging (Bypasses RLS)
-const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || '';
-const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_SERVICE_ROLE || '';
-const supabase = createClient(supabaseUrl, supabaseKey);
 
 // Define the exact schema we expect Gemini to return
 const extractionSchema: Schema = {
@@ -58,6 +50,15 @@ const extractionSchema: Schema = {
 
 export async function POST(req: Request) {
   try {
+    // Initialize Gemini Client
+    const ai = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY || 'dummy_key_for_build' });
+    const model = process.env.GEMINI_MODEL || 'gemini-2.0-flash';
+
+    // Initialize Supabase Service Client for Audit Logging (Bypasses RLS)
+    const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || 'https://dummy.supabase.co';
+    const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_SERVICE_ROLE || 'dummy_key';
+    const supabase = createClient(supabaseUrl, supabaseKey);
+
     const { text, principalId, organizationId } = await req.json();
 
     if (!text) {
