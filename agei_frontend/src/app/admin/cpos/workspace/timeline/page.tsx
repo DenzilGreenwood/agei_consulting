@@ -182,9 +182,9 @@ export default function TimelineWorkspace() {
                         {event.metadata}
                       </div>
                     )}
-                    {event.stakeholder_ids && event.stakeholder_ids.length > 0 && (
+                    {(event as any).stakeholder_ids && (event as any).stakeholder_ids.length > 0 && (
                       <div className="mt-2 pt-2 border-t border-border/20 flex flex-wrap gap-2">
-                        {Array.from(new Set(event.stakeholder_ids)).map(sid => {
+                        {Array.from(new Set((event as any).stakeholder_ids as string[])).map(sid => {
                           const s = state.stakeholders.find(x => x.id === sid);
                           if (!s) return null;
                           const isChampion = s.champion_status === 'Strong Champion' || s.champion_status === 'Supportive';

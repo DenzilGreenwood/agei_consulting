@@ -10,7 +10,7 @@ function LoginForm() {
   const searchParams = useSearchParams()
   const [isLogin, setIsLogin] = useState(true)
   const [isLoading, setIsLoading] = useState(false)
-  const [error, setError] = useState<string | null>(searchParams.get('error'))
+  const [error, setError] = useState<string | null>(searchParams?.get('error') || null)
   const [success, setSuccess] = useState<string | null>(null)
 
   async function handleSubmit(formData: FormData) {

@@ -37,7 +37,7 @@ export default function SetupLayout({ children }: { children: React.ReactNode })
           <aside className="w-64 shrink-0 space-y-1">
             <h2 className="text-xs font-semibold text-muted-foreground uppercase tracking-wider mb-3 px-3">Configuration</h2>
             {navItems.map((item) => {
-              const isActive = pathname.startsWith(item.href);
+              const isActive = pathname?.startsWith(item.href);
               const Icon = item.icon;
               return (
                 <Link

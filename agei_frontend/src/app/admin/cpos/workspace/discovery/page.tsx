@@ -529,7 +529,7 @@ function ActiveConsoleView({
           <span className="text-muted-foreground">Pipeline Status:</span>
           <select 
             value={status} 
-            onChange={e => setStatus(e.target.value)}
+            onChange={e => setStatus(e.target.value as any)}
             className="bg-muted border-none rounded-md px-3 py-1.5 focus:ring-1 focus:ring-primary outline-none text-foreground"
           >
             <option className="bg-background text-foreground" value="New">New</option>

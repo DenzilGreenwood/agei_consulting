@@ -10,7 +10,7 @@ function BuilderContent() {
   const { state, addForm, updateForm } = useSetup();
   const searchParams = useSearchParams();
   const router = useRouter();
-  const formId = searchParams.get('id');
+  const formId = searchParams?.get('id');
 
   const existingForm = formId ? state.forms.find(f => f.id === formId) : null;
 

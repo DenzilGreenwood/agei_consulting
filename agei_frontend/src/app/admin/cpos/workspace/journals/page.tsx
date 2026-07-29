@@ -147,7 +147,8 @@ export default function JournalsWorkspace() {
         content: data.clean_transcript || newContent,
         created_at: new Date().toISOString(),
         tags: ['Smart-Import'],
-        is_private: isPrivate
+        is_private: isPrivate,
+        participant_ids: []
       });
 
       if (data.extracted_capsules && Array.isArray(data.extracted_capsules)) {

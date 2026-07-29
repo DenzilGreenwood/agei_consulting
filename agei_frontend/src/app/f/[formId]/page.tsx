@@ -6,7 +6,7 @@ import { SetupProvider, useSetup } from '@/lib/setup/SetupContext';
 
 function FormRenderer() {
   const params = useParams();
-  const formId = params.formId as string;
+  const formId = params?.formId as string;
   const { state, addSubmission } = useSetup();
   
   const [formData, setFormData] = useState<Record<string, any>>({});
